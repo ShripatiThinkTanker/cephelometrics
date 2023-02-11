@@ -3,14 +3,23 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { AddEditCephelometricsComponent } from './add-edit-cephelometrics/add-edit-cephelometrics.component';
+import { CephelometricsComponent } from './cephelometrics/cephelometrics.component';
+import { CephLibComponent } from './ceph-lib/ceph-lib.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AddEditCephelometricsComponent,
+    CephelometricsComponent,
+    CephLibComponent
   ],
   imports: [
+    SharedModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,144 @@
+#stack-canvas {
+    // overflow: hidden;
+    position: relative;
+    cursor: crosshair;
+    > canvas {
+      max-width: 100%;
+      height: auto;
+      position: absolute;
+      left: 0;
+      top: 0;
+  
+      overflow: hidden;
+  
+      .image {
+        z-index: 0;
+      }
+      .bezier {
+        z-index: 1;
+      }
+      .landmarks {
+        z-index: 2;
+      }
+      .points {
+        z-index: 3;
+      }
+      resize: both;
+    }
+  }
+  
+  .menu-title {
+    text-align: start;
+    color: #000000;
+  }
+  h4 {
+    position: sticky;
+    font-weight: bold;
+    color: #000000;
+  }
+  
+  .card-body {
+    max-width: 100%;
+    min-height: 25rem;
+    min-width: 17rem;
+    max-height: 30px;
+  }
+  
+  a.link-btns {
+    cursor: pointer;
+  }
+  
+  a.link-btns-disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+  
+  .overlay {
+    position: absolute;
+    width: 899px;
+    height: 699px;
+  }
+  .right-menu-main {
+    display: grid;
+    align-content: center;
+    justify-content: end;
+    justify-items: end;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(4, minmax(100px, auto));
+  }
+  .right-menu {
+    position: relative;
+    grid-column: 9 / 9;
+    grid-row: 2 / 4;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: scroll;
+    background: rgb(236 236 236);
+    z-index: 100;
+  }
+  .right-menu > li {
+    list-style-type: none;
+  }
+  
+  .right-menu > li > a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .zoomingImage {
+    grid-column: 7/9;
+    grid-row: 4/4;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: subgrid;
+  }
+  .data-table {
+    position: relative;
+    display: grid;
+    grid-column: 9/9;
+    grid-row: 4/4;
+    align-items: center;
+    width: 100%;
+    overflow: scroll;
+    z-index: 100;
+  }
+  .result-table {
+    color: black;
+    border: 1px solid #130e0e;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    background-color: rgb(236, 236, 236);
+  }
+  
+  .result-table > tr {
+    color: black;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .result-table > tr > th {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+  }
+  .right-menu-images {
+    grid-column: 7/9;
+    grid-row: 2/4;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: subgrid;
+  }
+  
+  .pointsDiv {
+    position: relative;
+    grid-column: 9/9;
+    grid-row: 1/4;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: subgrid;
+    z-index: 100;
+  }
+  .image {
+    width: 276px;
+    height: 296px;
+  }
+  .zoomButtonGroups {
+    // bottom: 100px;
+    // right: 211px;
+    position: relative;
+    z-index: 100;
+  }
+  

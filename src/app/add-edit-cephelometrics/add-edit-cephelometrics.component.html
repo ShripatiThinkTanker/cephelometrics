@@ -1,0 +1,26 @@
+<mat-card
+
+  class="content-card file-dropzone"
+>
+  <mat-card-title> Select your file here </mat-card-title>
+  <mat-card-content (click)="fileDropRef.click()">
+    <input
+      hidden
+      multiple
+      #fileDropRef
+      type="file"
+      id="fileDropRef"
+      (change)="uploadFile($event)"
+    />
+    <div class="dashed-square">
+      <p>Browse for file</p>
+      <mat-icon>cloud_upload</mat-icon>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+
+
+<!-- <input type = "file" name = "fileInput" (change)="uploadFile($event)" /> -->
+
