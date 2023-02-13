@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const lineSchema = new mongoose.Schema({
-  masterObjectId: String,
+  masterObjectId: mongoose.Types.ObjectId,
   distance: String,
   distanceinPx: String,
   left: String,

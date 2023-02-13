@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const angleSchema = new mongoose.Schema({
-  masterObjectId: String,
+  masterObjectId: mongoose.Types.ObjectId,
   id: Number,
   description: String,
   mean: Number,

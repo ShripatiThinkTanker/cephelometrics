@@ -74,3 +74,123 @@ export const steinerPoints: Array<pointList> = [
         imagePath : 'assets/img/O.jpg'
     }
 ]
+
+export const basicPoints : Array<pointList> = [
+    {
+        pointName: 'Calibration Point 1 (C1)',
+        isActive: true,
+        pointAlias: 'C1',
+        imagePath: '',
+    },
+    {
+        pointName: 'Calibration Point 2 (C2)',
+        isActive: true,
+        pointAlias: 'C2',
+        imagePath: '',
+    },
+    { pointName: 'Sella (s)', isActive: true, pointAlias: 'S', imagePath: '' },
+    {
+        pointName: 'Nasion (Na)',
+        isActive: true,
+        pointAlias: 'N',
+        imagePath: '',
+    },
+    {
+        pointName: 'A-point (A)',
+        isActive: true,
+        pointAlias: 'A',
+        imagePath: '',
+    },
+    {
+        pointName: 'B-point (B)',
+        isActive: true,
+        pointAlias: 'B',
+        imagePath: '',
+    },
+
+    {
+        pointName: 'Menton (Me)',
+        isActive: true,
+        pointAlias: 'M',
+        imagePath: '',
+    },
+
+    { pointName: 'Gonion', isActive: true, pointAlias: 'Go', imagePath: '' },
+
+    {
+        pointName: 'Pogonion (Pg)',
+        isActive: true,
+        pointAlias: 'P',
+        imagePath: '',
+    },
+    {
+        pointName: 'Gnathion (Gn)',
+        isActive: true,
+        pointAlias: 'G',
+        imagePath: '',
+    },
+
+    {
+        pointName: 'Anterior Nasal Spine (ANS)',
+        isActive: true,
+        pointAlias: 'AN',
+        imagePath: '',
+    },
+    {
+        pointName: 'Posterior Nasal Spine (PNS)',
+        isActive: true,
+        pointAlias: 'PN',
+        imagePath: '',
+    },
+    {
+        pointName: 'Basion (Ba)',
+        isActive: true,
+        pointAlias: 'BA',
+        imagePath: '',
+    },
+    {
+        pointName: 'Palatal roof',
+        isActive: true,
+        pointAlias: 'pr',
+        imagePath: '',
+    },
+    {
+        pointName: 'Orbitale (Or)',
+        isActive: true,
+        pointAlias: 'or',
+        imagePath: '',
+    },
+    {
+        pointName: 'Articulare (Ar)',
+        isActive: true,
+        pointAlias: 'Ar',
+        imagePath: '',
+    },
+    {
+        pointName: 'Porion (Po)',
+        isActive: true,
+        pointAlias: 'Po',
+        imagePath: '',
+    },
+    {
+        pointName: 'Key ridges',
+        isActive: true,
+        pointAlias: 'kr',
+        imagePath: '',
+    },
+    {
+        pointName: 'Anterior Point of Occlusal Plane (apOcP)',
+        isActive: true,
+        pointAlias: 'apOcP',
+        imagePath: '',
+    },
+    {
+        pointName: 'Posterior Point of Occlusal Plane (ppOcP)',
+        isActive: true,
+        pointAlias: 'ppOcP',
+        imagePath: '',
+    },
+    { pointName: 'AO-point', isActive: true, pointAlias: 'AO', imagePath: '' },
+    { pointName: 'BO-point', isActive: true, pointAlias: 'BO', imagePath: '' },
+    
+]

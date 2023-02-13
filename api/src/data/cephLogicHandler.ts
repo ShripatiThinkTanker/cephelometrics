@@ -10,26 +10,24 @@ const cephLogicHandler = {
     },
     "uploadData": async (payload:any)=> {
        
-        const newDataImageURl = payload.dataImage.replace(/['"]/g,'');
+        const newDataImageURl = payload.fileName.replace(/['"]/g,'');
         const newPayload = {dataImage : newDataImageURl, xrayName: payload.xrayName}
         const res:any = await cephMasterModel.create(newPayload).then(result => {return result}).catch(err => console.log(err));
-       
+        console.log(res)
         return {"message" : "data inserted successfully", "data" : res._id}; 
     },
     "uploadCephData": async(payload:any) => {
         let pointData: any = {}
         let lineData: any = {}
         let angle_info: any  = {}
-        pointData['masterObjectId'] = new ObjectId(payload.ceph_id);
-        lineData['masterObjectId'] = new ObjectId(payload.ceph_id);
-        angle_info['masterObjectId'] = new ObjectId(payload.ceph_id);
 
         pointData = payload.points;
         lineData = payload.lines;
         angle_info = payload.angle_info;
 
-        pointData.forEach((element:any) => {
-            element['masterObjectId'] = new ObjectId(payload.ceph_id) 
+        Object.keys(pointData).forEach((element:any) => {
+            console.log(element)
+            // element[element]['masterObjectId'] = new ObjectId(payload.ceph_id) 
         });
 
         lineData.forEach((element:any) => {

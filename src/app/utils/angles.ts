@@ -10,8 +10,8 @@ export interface Angle {
 }
 
 export const angles : {[k: string] : Angle} = {
-	'C1-C2^C2-C1': {
-		id: 'C1-C2^C2-C1',
+	'C1-C2^': {
+		id: 'C1-C2^',
 		description: 'SNA angle, describes anteroposterior position of the maxilla in relation to the cranial base',
 		mean: 82,
 		deviation: 2,
@@ -69,6 +69,18 @@ export const angles : {[k: string] : Angle} = {
 		deviation: 5.9,
 		inc: 'Concave skeletal profile',
 		dec: 'Convex skeletal profile',
+		norm: 'Straight skeletal profile'
+	},
+
+	'Pog-N^P-O': {
+		id: 'Pog-N^P-O',
+		name : "NA-FH",
+		description:
+			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
+		mean: 80,
+		deviation: 5.9,
+		inc: 'protrusive or prognathic maxilla',
+		dec: 'deficient or retrognathic maxilla',
 		norm: 'Straight skeletal profile'
 	},
 	'Me-Go^ANS-PNS': {

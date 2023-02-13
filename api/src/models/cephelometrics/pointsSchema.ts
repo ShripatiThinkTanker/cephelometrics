@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const pointSchema = new mongoose.Schema({
-    masterObjectId : String, 
+    masterObjectId : mongoose.Types.ObjectId, 
     pointName: String,
     x: Number,
     y: Number,

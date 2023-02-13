@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
-import { pointList, steinerPoints } from '../utils/steinerPoints';
+import { basicPoints, pointList, steinerPoints } from '../utils/steinerPoints';
 import { calculateAngle } from '../utils/utilityFunctions';
+import { Router,ActivatedRoute } from '@angular/router';
+import { CephelometricsService } from '../services/cephelometrics.service';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -17,10 +19,16 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  strinerAngles = [angles['C1-C2^C2-C1'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N']];
+  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['Pog-N^P-O']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
+  payload: {} = {};
+
+  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService){
+
+  }
+
   ngOnInit(){
     this.imageURL = localStorage.getItem("imageData");
     this.instance = Panzoom(document.getElementById('divBG') as HTMLElement);
@@ -31,7 +39,9 @@ export class CephLibComponent {
     this.height = localStorage.getItem("height");
   }
   get lines() {
+
     return (
+
 			this.strinerAngles.map((angle) => angle.id).reduce((arr: string[], angleID) => {
         angleID.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
         return arr;
@@ -41,7 +51,7 @@ export class CephLibComponent {
         
         const pointACoordinates = this.pointsArray[pointAID];
         const pointBCoordinates = this.pointsArray[pointBID];
-        var x1,x2,y1,y2,distance,left,top,angle,x_left,x_top,x_angle,distanceinPx;
+        var x1,x2,y1,y2,distance,left,top,angle,x_left,x_top,x_angle,distanceinmm;
        
         if(pointACoordinates != undefined && pointBCoordinates != undefined){
            x1 = pointACoordinates.x;
@@ -49,7 +59,7 @@ export class CephLibComponent {
 					 y1 = pointACoordinates.y;
 					 y2 = pointBCoordinates.y;
           distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
-          //distanceinPx = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+          distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
           left = Math.floor((x1 + x2) / 2 - distance / 2)  +5 ;
           top = Math.floor((y1 + y2) / 2 - 1 / 2) + 5;
           angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
@@ -58,9 +68,11 @@ export class CephLibComponent {
           x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
           x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
         }
+
+       
       return {
-        distance ,
-        distanceinPx,
+        distance,
+        distanceinmm,
         left,
         top,
         angle,
@@ -117,24 +129,20 @@ export class CephLibComponent {
 	}
 
   addPoint(event: MouseEvent){
-    
+   
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
+    if(this.options.length > this.count + 1){
     this.previewImage = this.options[this.count + 1].imagePath;
+    }
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x:event.offsetX,
       y:event.offsetY,
       point_name_alias: this.pointNameAlias
     }
-    this.lines.forEach((element) => {
-     
-      if(element.distance === undefined){
-        const index = this.lines.indexOf(element);
-        this.lines.splice(index, 1);
-      }
-    })
+   
     console.log(this.lines)
     console.log(this.anglesValues);
     this.count++;
@@ -146,34 +154,57 @@ export class CephLibComponent {
      let newPoints = Object.keys(this.pointsArray)
 
      console.log(newPoints)
-    //  this.pointsArray.forEach((element) => {
-
-    //   if(element.pointName == this.options[index].pointName){
-    //     const index = this.pointsArray.indexOf(element);
-    //     this.pointsArray.splice(index,1);
-    //   }
-    //  })
+      newPoints.forEach((element) => {
+        if(this.pointsArray[element].point_name_alias == this.options[index].pointAlias){
+          delete this.pointsArray[element]
+        }
+      })
      this.count--;
 
   }
 
-zoomIn() {
-    this.instance.zoomIn();
-}
+  zoomIn() {
+      this.instance.zoomIn();
+  }
 
-zoomOut() {
-    this.instance.zoomOut();
-}
+  analysisChange(event:any){
+    const options:any = {
+      steinerAnalysis : steinerPoints,
+      BasicAnalysis :  basicPoints
+    }
+    console.log(event.target.value)
+    this.options = options[event.target.value]
+  }
 
-reset() {
-  this.instance.reset();
-}  
+  zoomOut() {
+      this.instance.zoomOut();
+  }
 
-disableContextMenu(){
-  //this.instance.pan(100, 100);
-  console.log(this.instance)
-  return false;
+  reset() {
+    this.instance.reset();
+  }  
 
-}
+  disableContextMenu(){
+    //this.instance.pan(100, 100);
+    console.log(this.instance)
+    return false;
+
+  }
+
+  submitPayload(){
+    this.payload = {
+      "ceph_id" : atob(this.activatedRouter.snapshot.params['id']),
+      "points" : this.pointsArray,
+      "lines" : this.lines,
+      "angles" : this.anglesValues,
+    }
+    this.cephService.uploadCephData(this.payload).subscribe((result)=> {
+      console.log("data uploaded successfully")
+    })
+  }
+
+  goBackToMainPage(){
+    this.router.navigate(["cephelometrics"])
+  }
 
 }
