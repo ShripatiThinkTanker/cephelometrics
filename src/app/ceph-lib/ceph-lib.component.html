@@ -4,7 +4,8 @@
     <button class="zoomOut btn btn-outline-primary" (click)="zoomOut()"> - </button>
     <button class="reset btn btn-outline-primary" (click)="reset()"> Reset </button>
   </div>
-  <div id="stack-canvas" id="divBG" (click) = "addPoint($event)"[ngStyle]="{'background-image':'url('+ imageURL +')','width': '899px',
+  <div class = "containmentDiv">
+  <div id="stack-canvas" id="divBG" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)"[ngStyle]="{'background-image':'url('+ imageURL +')','width': '899px',
     'height': '750px',
     'background-size': 'cover',
     'position' : 'fixed',
@@ -28,19 +29,33 @@
 
           <ng-container  *ngFor = "let angleInfo of anglesValues">
             <ng-container *ngIf = "angleInfo.id != 'C1-C2^C2-C1' && angleInfo.value!= undefined">
-                <span style = "font-size: 20px;"> {{angleInfo.value}} </span>
+                <span [ngStyle] = "{'position':'relative','font-size': '20px', 'top': angleInfo.top+'px', 'left' : angleInfo.left+ 'px'}"> {{angleInfo.value}} </span>
             </ng-container>
           </ng-container>
       </div>
     </div>
-    
+    </div>
     <div class="right-menu-main">
     <div class="right-menu-images">
-     
-
+      <ng-container *ngIf="previewImage">
+        <img src="{{previewImage}}" style="position:relative; z-index:100" width=272 height=304>
+      </ng-container>
+<!--      
+      <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+      </div>
       
+      <div id="main">
+        <button class="openbtn" (click)="openNav()">☰ Open Sidebar</button>  
+      </div>
+      
+    </div> -->
     </div>
-    <div class="pointsDiv">
+  <div class="pointsDiv">
 
     <select class="selectOptions" style="position: relative;">
         <option value=" BasicAnalysis"> Basic Analysis</option>
@@ -49,16 +64,15 @@
         <option value="MandibularAnalysis"> Mandibular Analysis </option>
         <option value="DownsAnalysis"> Downs Analysis </option>
         <option selected value="steinerAnalysis"> Steiner Analysis </option>
-        <!-- <option> Mills-Eastman Analysis </option> -->
-        <!-- <option> Wits Appraisal </option> -->
-        <!-- <option> Tweed's Triangle </option> -->
+       <option> Mills-Eastman Analysis </option>
+        <option> Wits Appraisal </option> 
+       <option> Tweed's Triangle </option> 
     </select>
     
 </div>
 <div class="card-body right-menu">
     <h4 class=""> Points </h4>
     
-      <!-- </ng-container> -->
       <div class="menu-title" *ngFor="let option of options let i = index">
           <ng-container *ngIf="option.isActive else cond2">
               <input type="checkbox" /><a class="link-btns">{{
@@ -78,34 +92,28 @@
    
 
 
-</div>
-
-<!-- <div class="data-table">
-  <table class="result-table">
-    <tr>
-      <th> Results </th>
-      <th> Clinical Norm </th>
-      <th> Value </th>
-      <th> Interpretation </th>
-    </tr>
-    <!-- <ng-container *ngFor="let results of analysisResults">
+    <div class="data-table">
+      <table class="result-table">
         <tr>
-            <td>{{results.angleName}} </td>
-            <td> {{results.clinicalNorm}} </td>
-            <td> {{results.value}} </td>
-            <ng-container *ngIf="results.value else cond5">
-                <ng-container *ngIf="results.showMax else cond4">
-                    <td> {{results.max}} </td>
-                </ng-container>
-                <ng-template #cond4>
-                    <td> {{results.min}}</td>
-                </ng-template>
-            </ng-container>
-            <ng-template #cond5>
-                <td> {{results.interpretation}} </td>
-            </ng-template>
+          <th> Results </th>
+          <th> Clinical Norm </th>
+          <th> Value </th>
+          <th> Interpretation </th>
         </tr>
-    </ng-container> -->
-    
-<!-- </table>
-</div> --> -->
+        <ng-container *ngFor="let results of anglesValues">
+          <ng-container *ngIf = "results.id != 'C1-C2^C2-C1'">
+            <tr>
+                <td>{{results.name}} </td>
+                <td> {{results.mean}}° </td>
+                <td> {{results.value}}° </td>
+                <td> {{results.interpretation}} </td>
+               
+            </tr>
+        </ng-container>
+        </ng-container>
+        
+    </table>
+    </div>
+</div> 
+
+

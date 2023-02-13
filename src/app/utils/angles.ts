@@ -1,5 +1,6 @@
 export interface Angle {
     id : string;
+	name?: string
     description : string;
     mean: number;
     deviation : number;
@@ -20,6 +21,7 @@ export const angles : {[k: string] : Angle} = {
 	},
     'S-N^N-A': {
 		id: 'S-N^N-A',
+		name : "SNA",
 		description: 'SNA angle, describes anteroposterior position of the maxilla in relation to the cranial base',
 		mean: 82,
 		deviation: 2,
@@ -29,6 +31,7 @@ export const angles : {[k: string] : Angle} = {
 	},
 	'S-N^N-B': {
 		id: 'S-N^N-B',
+		name: 'SNB',
 		description: 'SNB angle, describes anteroposterior position of the mandible in relation to the cranial base',
 		mean: 80,
 		deviation: 2,
@@ -39,6 +42,7 @@ export const angles : {[k: string] : Angle} = {
 	'N-B^N-A': {
 		id: 'N-B^N-A',
 		description: 'ANB, a relative determination of the relation­ship of the maxilla to the mandible.',
+		name : "ANB",
 		mean: 2,
 		deviation: 2,
 		inc: 'Skeletal Class II relationship',
@@ -49,7 +53,19 @@ export const angles : {[k: string] : Angle} = {
 		id: 'N-A^A-Pog',
 		description:
 			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
+		name: 'NAPog',
 		mean: 0,
+		deviation: 5.9,
+		inc: 'Concave skeletal profile',
+		dec: 'Convex skeletal profile',
+		norm: 'Straight skeletal profile'
+	},
+	'S-N^Pog-N': {
+		id: 'S-N^Pog-N',
+		name : "SN-NP",
+		description:
+			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
+		mean: 80,
 		deviation: 5.9,
 		inc: 'Concave skeletal profile',
 		dec: 'Convex skeletal profile',
@@ -105,6 +121,7 @@ export const angles : {[k: string] : Angle} = {
 	},
 	'S-N^Me-Go': {
 		id: 'S-N^Me-Go',
+		name : "SN-MP",
 		description: 'SN-MP, The mandibular plane angle, SN-NP, measure for vertical growth patterns',
 		mean: 32,
 		deviation: 5,

@@ -56,8 +56,8 @@ export const steinerPoints: Array<pointList> = [
         imagePath : 'assets/img/C1.png'
     },
     {
-        pointName: "Pogonion (Pg)",
-        pointAlias : "Pg",
+        pointName: "Pogonion (Pog)",
+        pointAlias : "Pog",
         isActive : true,
         imagePath : 'assets/img/C1.png'
     },

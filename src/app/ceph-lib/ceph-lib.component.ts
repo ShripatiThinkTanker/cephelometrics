@@ -17,9 +17,10 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  strinerAngles = [angles['C1-C2^C2-C1'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^OLp-OLa']];
+  strinerAngles = [angles['C1-C2^C2-C1'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N']];
   width:string|null = "";
   height:string|null = "";
+  previewImage:string = "";
   ngOnInit(){
     this.imageURL = localStorage.getItem("imageData");
     this.instance = Panzoom(document.getElementById('divBG') as HTMLElement);
@@ -89,9 +90,10 @@ export class CephLibComponent {
 			const lineAIndex = this.findIndex(this.lines, (line:any) => line.id === lineAID);
 			const lineBIndex = this.findIndex(this.lines, (line:any) => line.id === lineBID);
 
-			const lineA = this.lines[lineAIndex];
-			const lineB = this.lines[lineBIndex];
+			const lineA:any = this.lines[lineAIndex];
+			const lineB:any = this.lines[lineBIndex];
 
+      //let top =  lineA.top + 20
 			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB) : 'NA';
 
 			const max = angle.mean + angle.deviation;
@@ -99,8 +101,11 @@ export class CephLibComponent {
 
 			return {
 				id: angle.id,
+        name : angle.name,
 				description: angle.description,
 				mean: angle.mean,
+        top: lineA.top,
+        left: lineB.left + 20,
 				deviation: angle.deviation,
 				value: angleValue,
 				interpretation:
@@ -116,7 +121,7 @@ export class CephLibComponent {
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
-    
+    this.previewImage = this.options[this.count + 1].imagePath
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x:event.offsetX,
@@ -159,4 +164,12 @@ zoomOut() {
 reset() {
   this.instance.reset();
 }  
+
+disableContextMenu(){
+  //this.instance.pan(100, 100);
+  console.log(this.instance)
+  return false;
+
+}
+
 }
