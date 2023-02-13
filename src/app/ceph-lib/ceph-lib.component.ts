@@ -121,7 +121,7 @@ export class CephLibComponent {
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
-    this.previewImage = this.options[this.count + 1].imagePath
+    this.previewImage = this.options[this.count + 1].imagePath;
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x:event.offsetX,
@@ -142,6 +142,10 @@ export class CephLibComponent {
 
   removePoint(index:number){
      this.options[index].isActive = true;
+
+     let newPoints = Object.keys(this.pointsArray)
+
+     console.log(newPoints)
     //  this.pointsArray.forEach((element) => {
 
     //   if(element.pointName == this.options[index].pointName){

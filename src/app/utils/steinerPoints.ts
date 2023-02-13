@@ -11,66 +11,66 @@ export const steinerPoints: Array<pointList> = [
         pointName : "Calibration Point 1",
         pointAlias : "C1",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/C1.jpg'
     },
     {
         pointName : "Calibration Point 2",
         pointAlias : "C2",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/C2.jpg'
     },
     {
         pointName : "Sella (s)",
         pointAlias : "S",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/S.jpg'
     },
     {
         pointName : "Nasion (Na)",
         pointAlias : "N",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/Na.jpg'
     },
     {
         pointName : "A-point (A)",
         pointAlias : "A",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/A.jpg'
     },
     {
         pointName : "B-point (B)",
         pointAlias : "B",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/B.jpg'
     },
     {
         pointName: "Menton (Me)",
         pointAlias : "Me",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/Me.jpg'
     },
     {
         pointName: "Gonion (Go)",
         pointAlias : "Go",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/Go.jpg'
     },
     {
         pointName: "Pogonion (Pog)",
         pointAlias : "Pog",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/Pog.jpg'
     },
     {
         pointName : "Porion (P)",
         pointAlias : "P",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/P.jpg'
     },
     {
         pointName : "Orbitale (O)",
         pointAlias : "O",
         isActive : true,
-        imagePath : 'assets/img/C1.png'
+        imagePath : 'assets/img/O.jpg'
     }
 ]
