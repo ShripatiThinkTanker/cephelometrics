@@ -30,6 +30,19 @@ export const convertImageToBase64URL = (items: FileList): boolean =>{
     return isLoaded;
 }
 
+export const calculateAngle = (lineA: any, lineB: any)=> {
+    
+		if (!(lineA.angle && lineB.angle)) {
+			return;
+		}
+		let angle = Math.round((lineA.angle - lineB.angle) * 10) / 10;
+		if (angle > 180) {
+			angle = angle - 180;
+		}
+
+		return Math.round(angle * 10) / 10;
+}
+
 // function loadFile(item: File){
    
 // }

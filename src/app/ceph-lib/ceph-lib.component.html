@@ -26,16 +26,17 @@
             <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left+'px','top': line.top+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
           </ng-container>
 
-       
-
+          <ng-container  *ngFor = "let angleInfo of anglesValues">
+            <ng-container *ngIf = "angleInfo.id != 'C1-C2^C2-C1' && angleInfo.value!= undefined">
+                <span style = "font-size: 20px;"> {{angleInfo.value}} </span>
+            </ng-container>
+          </ng-container>
       </div>
     </div>
     
     <div class="right-menu-main">
     <div class="right-menu-images">
-      <!-- <ng-container *ngIf="previewImage">
-        <img src="{{previewImage}}" style="position:relative; z-index:100" width=272 height=304>
-      </ng-container> -->
+     
 
       
     </div>

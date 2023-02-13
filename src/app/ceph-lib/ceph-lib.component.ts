@@ -3,6 +3,7 @@ import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
 import { pointList, steinerPoints } from '../utils/steinerPoints';
+import { calculateAngle } from '../utils/utilityFunctions';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -71,6 +72,45 @@ export class CephLibComponent {
       };
       })
   }
+
+  findIndex(array:any, callback:(point:any) => boolean){
+    for(let index = 0; index < array.length; index++){
+      if(callback(array[index])){
+        return index;
+      }
+    }
+    return - 1;
+  }
+  get anglesValues() {
+		return this.strinerAngles.map((angle) => {
+			const lineAID = angle.id.split('^')[0];
+			const lineBID = angle.id.split('^')[1];
+
+			const lineAIndex = this.findIndex(this.lines, (line:any) => line.id === lineAID);
+			const lineBIndex = this.findIndex(this.lines, (line:any) => line.id === lineBID);
+
+			const lineA = this.lines[lineAIndex];
+			const lineB = this.lines[lineBIndex];
+
+			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB) : 'NA';
+
+			const max = angle.mean + angle.deviation;
+			const min = angle.mean - angle.deviation;
+
+			return {
+				id: angle.id,
+				description: angle.description,
+				mean: angle.mean,
+				deviation: angle.deviation,
+				value: angleValue,
+				interpretation:
+					angleValue === 'NA' || angleValue === undefined
+						? ''
+						: angleValue > max ? angle.inc : angleValue < min ? angle.dec : angle.norm
+			};
+		});
+	}
+
   addPoint(event: MouseEvent){
     
     this.options[this.count].isActive = false;
@@ -91,7 +131,7 @@ export class CephLibComponent {
       }
     })
     console.log(this.lines)
-    
+    console.log(this.anglesValues);
     this.count++;
   }
 
