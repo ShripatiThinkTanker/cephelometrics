@@ -10,6 +10,6 @@ appIndex.use(express.json({limit: '50mb'}));
 
 appIndex.use('/cephelometrics', app);
 
-appIndex.listen(3000, () => {
-    console.log("App Running on port 3000");
-})
+appIndex.listen(5000, () => {
+  console.log('App Running on port 5000');
+});

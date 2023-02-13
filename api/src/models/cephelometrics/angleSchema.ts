@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const angleSchema = new mongoose.Schema({
-    masterObjectId : String,
-    angle_calculated: String,
-    endPointX : Number,
-    endPointY : Number,
-    startPointX : Number,
-    startPointY : Number,
-
-})
+  masterObjectId: String,
+  id: Number,
+  description: String,
+  mean: Number,
+  deviation: Number,
+  value: String,
+  interpretation: String,
+});
 
 const AngleModel = mongoose.model('angles',angleSchema);
 export default AngleModel;
