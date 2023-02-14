@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const angleSchema = new mongoose.Schema({
   masterObjectId: mongoose.Types.ObjectId,
-  id: Number,
+  id: String,
   description: String,
   mean: Number,
   deviation: Number,

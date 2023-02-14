@@ -23,24 +23,34 @@ const cephLogicHandler = {
 
         pointData = payload.points;
         lineData = payload.lines;
-        angle_info = payload.angle_info;
-
-        Object.keys(pointData).forEach((element:any) => {
-            console.log(element)
-            // element[element]['masterObjectId'] = new ObjectId(payload.ceph_id) 
-        });
-
+        angle_info = payload.angles;
+        // Object.keys(pointData).forEach((element:any) => {
+        //     console.log(element)
+        //     // element[element]['masterObjectId'] = new ObjectId(payload.ceph_id) 
+        // });
+        var newPointArr = [];
+        for(const point in pointData){
+            pointData[point]['masterObjectId'] = new ObjectId(payload.ceph_id) 
+            newPointArr.push(pointData[point])
+        }
+        var LineArr:any = [];
         lineData.forEach((element:any) => {
-            element['masterObjectId'] = new ObjectId(payload.ceph_id);
-        })
-
-        angle_info.forEach((element:any) => {
-            element['masterObjectId'] = new ObjectId(payload.ceph_id);
-        })
-
-        await pointModel.create(pointData).then(result => {return result}).catch(err => console.log(err));
-        await LineModel.create(lineData).then(result => {return result}).catch(err => console.log(err));
-        await AngleModel.create(angle_info).then(result => {return result}).catch(err => console.log(err));
+            if(element.hasOwnProperty('distance')){
+                element['masterObjectId'] = new ObjectId(payload.ceph_id);
+                LineArr.push(element);
+            }
+            })
+            var angle:any = [];
+            angle_info.forEach((element:any) => {
+                if(element.interpretation != ""){
+                    element['masterObjectId'] = new ObjectId(payload.ceph_id);
+                    angle.push(element)
+                }
+            })
+            
+        await LineModel.create(LineArr).then(result => {return result}).catch(err => console.log(err));
+        await pointModel.create(newPointArr).then(result => {return result}).catch(err => console.log(err));
+        await AngleModel.create(angle).then(result => {return result}).catch(err => console.log(err));
        
     },
 
