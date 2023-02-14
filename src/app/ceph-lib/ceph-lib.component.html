@@ -23,10 +23,11 @@
 
         </ng-container>
         
-          <ng-container *ngFor="let line of lines">
+          <ng-container *ngFor="let line of lineArr">
             <ng-container *ngIf = "line.distanceinmm !== undefined">
               <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left+'px','top': line.top+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
               <span [ngStyle] = "{'position':'relative', 'color' : 'red' ,'font-size': '20px', 'top': line.top +'px', 'left' : line.left! - 40+ 'px'}">{{line.distanceinmm}}mm</span>
+              <!-- <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(227, 227, 227)','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top+'px','width': line.x.x_distance+'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div> -->
             </ng-container>
           </ng-container>
 
@@ -94,7 +95,7 @@
           <th> Value </th>
           <th> Interpretation </th>
         </tr>
-        <ng-container *ngFor="let results of anglesValues">
+        <ng-container *ngFor="let results of anglesArr">
           <ng-container *ngIf = "results.id != 'C1-C2^C2-C1'">
             <tr>
                 <td>{{results.name}} </td>

@@ -10,8 +10,8 @@ const cephLogicHandler = {
     },
     "uploadData": async (payload:any)=> {
        
-        const newDataImageURl = payload.fileName.replace(/['"]/g,'');
-        const newPayload = {dataImage : newDataImageURl, xrayName: payload.xrayName}
+        const newDataImageURl = payload.dataURl.replace(/['"]/g,'');
+        const newPayload = {dataImage : newDataImageURl, xrayName: payload.fileName}
         const res:any = await cephMasterModel.create(newPayload).then(result => {return result}).catch(err => console.log(err));
         console.log(res)
         return {"message" : "data inserted successfully", "data" : res._id}; 
@@ -58,8 +58,8 @@ const cephLogicHandler = {
         const points:Array<any> = await pointModel.find({"masterObjectId": id}).select('-__v'); 
         const lines: Array<any> = await LineModel.find({"masterObjectId": id}).select('-__v');
         const angles : Array<any> = await AngleModel.find({"masterObjectId" : id}).select('-__v');
-        const all_xrays:Array<any> = await cephMasterModel.find().select('-__v'); 
-        const allObjects = {"points" : points, "lines" : lines, "angles" : angles, "xray_data" : all_xrays};
+        const all_xrays:Array<any> = await cephMasterModel.find({"_id" : id}).select('-__v'); 
+        const allObjects = {"points" : points, "lines" : lines,"angles" : angles, "xray_data" : all_xrays};
         return {"message" : "Data Sent Successfully", "data" : allObjects};
     }
 } 

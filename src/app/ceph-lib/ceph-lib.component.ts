@@ -24,20 +24,40 @@ export class CephLibComponent {
   height:string|null = "";
   previewImage:string = "";
   payload: {} = {};
+  lineArr:any = [];
+  anglesArr:any = [];
 
   constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService){
 
   }
 
   ngOnInit(){
-    this.imageURL = localStorage.getItem("imageData");
     this.instance = Panzoom(document.getElementById('divBG') as HTMLElement);
     this.options = steinerPoints;
+    // this.width = localStorage.getItem("width");
+    // console.log(this.strinerAngles)
+    // this.height = localStorage.getItem("height");
     
-    this.width = localStorage.getItem("width");
-    console.log(this.strinerAngles)
-    this.height = localStorage.getItem("height");
+    
+    this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
+      this.count = Object.keys(result.data.points).length;
+      console.log(this.count)
+      console.log(result.data.points)
+      this.imageURL = result.data.xray_data[0].dataImage;
+      this.lineArr = result.data.lines;
+      console.log(this.lineArr)
+      result.data.points.forEach((element:any) => {
+          this.pointsArray[element.point_name_alias] = {
+            pointName : element.poinName,
+            x: element.x,
+            y: element.y,
+            point_name_alias : element.point_name_alias
+          }
+      })
+      this.anglesArr = result.data.angles
+    })
   }
+
   get lines() {
 
     return (
@@ -64,8 +84,8 @@ export class CephLibComponent {
           top = Math.floor((y1 + y2) / 2 - 1 / 2) + 5;
           angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
  
-          x_left = Math.floor((x1 + x2) / 2 - 3000 / 2);
-          x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
+          x_left = Math.floor((x1 + x2) / 2 - 3000 / 2) + 5;
+          x_top = Math.floor((y1 + y2) / 2 - 1 / 2) + 5;
           x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
         }
 
@@ -143,8 +163,8 @@ export class CephLibComponent {
       point_name_alias: this.pointNameAlias
     }
    
-    console.log(this.lines)
-    console.log(this.anglesValues);
+    this.lineArr = this.lines;
+    this.anglesArr = this.anglesValues;
     this.count++;
   }
 
@@ -200,6 +220,7 @@ export class CephLibComponent {
     }
     this.cephService.uploadCephData(this.payload).subscribe((result)=> {
       console.log("data uploaded successfully")
+      this.router.navigate(['cephelometrics'])
     })
   }
 

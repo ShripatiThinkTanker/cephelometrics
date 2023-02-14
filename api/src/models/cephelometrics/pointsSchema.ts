@@ -5,6 +5,7 @@ const pointSchema = new mongoose.Schema({
     x: Number,
     y: Number,
     point_name_alias: String,
+    isActive : Boolean
 })
 
 const pointModel = mongoose.model('points',pointSchema);

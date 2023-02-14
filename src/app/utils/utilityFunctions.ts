@@ -12,8 +12,7 @@ export const convertImageToBase64URL = (items: FileList): boolean =>{
                 if (result && typeof result == "string") {
                     console.log(result);
                     localStorage.setItem("imageData", result); 
-                    var memoryImg = document.createElement('img');
-                    
+                        var memoryImg = document.createElement('img');
                         memoryImg.src = result;
                         var width = memoryImg.width;
                         var height = memoryImg.height;

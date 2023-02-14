@@ -3,9 +3,9 @@ const schema = mongoose.Schema;
 const lineSchema = new mongoose.Schema({
   masterObjectId: mongoose.Types.ObjectId,
   distance: String,
-  distanceinPx: String,
-  left: String,
-  top: String,
+  distanceinmm: Number,
+  left: Number,
+  top: Number,
   angle: String,
   x1: Number,
   y1: Number,

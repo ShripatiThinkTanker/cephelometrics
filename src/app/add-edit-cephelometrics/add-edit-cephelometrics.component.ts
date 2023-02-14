@@ -3,6 +3,7 @@ import { convertImageToBase64URL } from '../utils/utilityFunctions';
 import { Router } from '@angular/router';
 import { FormArray,FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { CephelometricsService } from '../services/cephelometrics.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-edit-cephelometrics',
   templateUrl: './add-edit-cephelometrics.component.html',
@@ -14,7 +15,7 @@ export class AddEditCephelometricsComponent {
   appDataForm = this.fb.group({
     fileName : ['', Validators.required]
   })
-  constructor(public router : Router, public fb : FormBuilder, public cephService : CephelometricsService){
+  constructor(public router : Router, public fb : FormBuilder, public cephService : CephelometricsService, public toaster: ToastrService){
 
 
   }
@@ -24,7 +25,8 @@ export class AddEditCephelometricsComponent {
     let fileList: FileList | null = element.files;
     if (fileList) {
         convertImageToBase64URL(fileList);
-        console.log("Loaded the image")
+        console.log("Loaded the image");
+        this.toaster.success("File Added", "File uploaded Successfully");
     }
   }
 
@@ -35,6 +37,7 @@ export class AddEditCephelometricsComponent {
       }
 
       this.cephService.uploadXRayData(this.payload).subscribe((result:any) => {
+        this.toaster.success("Data Successfully Uploaded", "You will be redirected to the next page");
         console.log("Result _id" + JSON.stringify(result));
         this.router.navigate(['cephelometrics/open/',btoa(result.data)])
       })
