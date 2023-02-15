@@ -6,6 +6,7 @@
     <h1 style="color:black"> Listing Page </h1>
   </div>
   <div class="flex">
+    <ng-container *ngIf = "listItem.length != 0; else cond1">
     <ng-container *ngFor="let data of listItem">
       <mat-card class="example-card">
         <mat-card-header>
@@ -26,4 +27,8 @@
         </mat-card-actions>
       </mat-card>
     </ng-container>
+    </ng-container>
+    <ng-template #cond1>
+        <p> No Images Found!! </p>
+        </ng-template>
   </div>
