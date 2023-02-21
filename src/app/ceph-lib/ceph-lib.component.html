@@ -4,38 +4,33 @@
     <button class="zoomOut btn btn-outline-primary" (click)="zoomOut()"> - </button>
     <button class="reset btn btn-outline-primary" (click)="reset()"> Reset </button>
   </div>
+
+  <!-- <div class = "containmentDiv1" >
+    </div> -->
   <div class = "containmentDiv">
-  <div id="stack-canvas" id="divBG" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)"[ngStyle]="{'background-image':'url('+ imageURL +')','width': '899px',
+  <div id="stack-canvas" id="divBG" [ngStyle]="{'width': '899px',
     'height': '750px',
-    'background-size': 'cover',
     'position' : 'fixed',
-    'background-position-x': '0px',
-    'background-position-y': '0px',
-    'background-repeat': 'no-repeat'
+    'cursor' : 'crosshair'
     
   }">
-      <div class="overlay">
+  <div class="overlay" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)" [ngStyle]=  "{'cursor':'crosshair'}">
+  <img src = "{{imageURL}}" width = "899" height = "800"/>
         <ng-container *ngFor="let points of pointsArray | keyvalue">
-          <div draggable="false"
+          <div draggable="true"
             [ngStyle]="{'display':'block','position':'absolute', 'width':'10px', 'height':'10px','background-color':'red','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x +'px','z-index':1}">
-            <span style="font-size:25px; color:red">{{points.value.point_name_alias}}</span>
           </div>
+          <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'red','top': points.value.y  + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
 
+        </ng-container> 
+        <ng-container *ngFor="let line of lineArr">
+          <ng-container *ngIf = "line.distanceinmm !== undefined">
+            <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '20px', 'top': line.top! + 40 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
+            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left+'px','top': line.top+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
+            <!-- <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(227, 227, 227)','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top+'px','width': line.x.x_distance+'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div> -->
+          </ng-container>
         </ng-container>
         
-          <ng-container *ngFor="let line of lineArr">
-            <ng-container *ngIf = "line.distanceinmm !== undefined">
-              <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left+'px','top': line.top+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
-              <span [ngStyle] = "{'position':'relative', 'color' : 'red' ,'font-size': '20px', 'top': line.top +'px', 'left' : line.left! - 40+ 'px'}">{{line.distanceinmm}}mm</span>
-              <!-- <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(227, 227, 227)','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top+'px','width': line.x.x_distance+'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div> -->
-            </ng-container>
-          </ng-container>
-
-          <!-- <ng-container  *ngFor = "let angleInfo of anglesValues">
-            <ng-container *ngIf = "angleInfo.id !== 'C1-C2^'">
-                <span [ngStyle] = "{'position':'relative', 'color' : 'red' ,'font-size': '20px', 'top': angleInfo.top+'px', 'left' : angleInfo.left+ 'px'}"> {{angleInfo.value}}° </span>
-            </ng-container>
-          </ng-container> -->
       </div>
     </div>
     </div>
@@ -67,23 +62,28 @@
 </div>
 <div class="card-body right-menu">
     <h4 class=""> Points </h4>
-    
-      <div class="menu-title" *ngFor="let option of options let i = index">
+    <table class = "menu-title">
+
+      <tr *ngFor="let option of options let i = index">
           <ng-container *ngIf="option.isActive else cond2">
-              <input type="checkbox" /><a class="link-btns">{{
+              <td><input type="checkbox" /><a class="link-btns">{{
                   option.pointName
-                }}</a>
+                }}</a></td>
             </ng-container>
             
             <ng-template #cond2>
-                <input type="checkbox" checked disabled /><a class="link-btns-disabled">{{
+                <td><input type="checkbox" checked disabled /><a class="link-btns-disabled">{{
                     option.pointName
-                 }} </a><mat-icon (click)="removePoint(i)" style="font-size: 18px;"> delete </mat-icon>
-            </ng-template>
-        </div>
+                  }} </a> </td>
+                  <td> </td>
+                  <td> </td>
+                  <td><mat-icon (click)="removePoint(i)" style="font-size: 18px;float: right;"> delete </mat-icon></td>
+                  
+                  </ng-template>
+        </tr>
         
-    </div>
-
+      </table>
+</div>
    
 
 

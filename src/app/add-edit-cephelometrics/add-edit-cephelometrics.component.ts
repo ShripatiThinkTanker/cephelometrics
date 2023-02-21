@@ -26,21 +26,24 @@ export class AddEditCephelometricsComponent {
     if (fileList) {
         convertImageToBase64URL(fileList);
         console.log("Loaded the image");
+        if(this.appDataForm.value.fileName != ""){
+        this.payload = {
+          fileName: this.appDataForm.value.fileName,
+          dataURl : localStorage.getItem("imageData"),
+        }
+        this.cephService.uploadXRayData(this.payload).subscribe((result:any) => {
+          console.log("Result _id" + JSON.stringify(result));
+          this.router.navigate(['cephelometrics/open/',btoa(result.data)])
+        })
         this.toaster.success("File Added", "File uploaded Successfully");
+      }else{
+        this.toaster.error("FileName is Required");
+      }
     }
   }
 
   submitPayload(){
-      this.payload = {
-        fileName: this.appDataForm.value.fileName,
-        dataURl : localStorage.getItem("imageData"),
-      }
-
-      this.cephService.uploadXRayData(this.payload).subscribe((result:any) => {
-        this.toaster.success("Data Successfully Uploaded", "You will be redirected to the next page");
-        console.log("Result _id" + JSON.stringify(result));
-        this.router.navigate(['cephelometrics/open/',btoa(result.data)])
-      })
+     
   }
 
 

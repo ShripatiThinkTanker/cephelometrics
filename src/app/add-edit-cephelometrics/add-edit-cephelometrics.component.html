@@ -13,6 +13,7 @@
   #fileDropRef
   type="file"
   id="fileDropRef"
+  accept="image/png, image/jpeg"
   (change)="uploadFile($event)"
   />
   <div class="dashed-square">
@@ -20,7 +21,7 @@
     <mat-icon>cloud_upload</mat-icon>
   </div>
 </mat-card-content>
-<button type = "button" (click) = "submitPayload()"> Submit </button>
+<!-- <button type = "button" (click) = "submitPayload()"> Submit </button> -->
 </mat-card>
 
 
