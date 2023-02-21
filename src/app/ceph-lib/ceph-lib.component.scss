@@ -130,6 +130,7 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: subgrid;
     z-index: 100;
+    top: 50px;
   }
   .image {
     width: 276px;
@@ -204,3 +205,7 @@
     text-align: center;
 
   }
+.magnificationFactorInput{
+  position: absolute;
+    left: 89%;
+    bottom: 91%;}

@@ -30,6 +30,7 @@ export class AddEditCephelometricsComponent {
         this.payload = {
           fileName: this.appDataForm.value.fileName,
           dataURl : localStorage.getItem("imageData"),
+          magnificationCalibration : 40
         }
         this.cephService.uploadXRayData(this.payload).subscribe((result:any) => {
           console.log("Result _id" + JSON.stringify(result));

@@ -35,31 +35,38 @@
     </div>
     </div>
     <div class="right-menu-main">
-    <div class="right-menu-images">
-    <div class="buttonGroups">
-      <button class = "btn btn-outline-success" (click) = "submitPayload()"> Submit </button>
-      <button class = "btn btn-outline-primary" (click) = "goBackToMainPage()"> Back </button>
+      <div class = "magnificationFactorInput">
+      Enter the Magnification Factor in mm
+      <form [formGroup] = "calibrationMagnification">
+        <input type = "text" formControlName="magnificationFactor"/>
+      </form>
       </div>
-
-      <ng-container *ngIf="previewImage">
-        <img src="{{previewImage}}" style="position:relative; z-index:100" width=272 height=304>
-      </ng-container>
-    </div>
-  <div class="pointsDiv">
-
-    <select class="selectOptions" style="position: relative;" (change) = "analysisChange($event)">
-        <option value="BasicAnalysis"> Basic Analysis</option>
-        <option value="DentalAnalysis"> Dental Analysis </option>
-        <option value="VerticalAnalysis"> Vertical Analysis </option>
-        <option value="MandibularAnalysis"> Mandibular Analysis </option>
-        <option value="DownsAnalysis"> Downs Analysis </option>
-        <option selected value="steinerAnalysis"> Steiner Analysis </option>
-       <option> Mills-Eastman Analysis </option>
-        <option> Wits Appraisal </option> 
-       <option> Tweed's Triangle </option> 
-    </select>
+      <div class="right-menu-images">
+        <div class="buttonGroups">
+          <button class = "btn btn-outline-success" (click) = "submitPayload()"> Submit </button>
+          <button class = "btn btn-outline-primary" (click) = "goBackToMainPage()"> Back </button>
+        </div>
+        
+        <ng-container *ngIf="previewImage">
+          <img src="{{previewImage}}" style="position:relative; z-index:100" width=272 height=304>
+        </ng-container>
+      </div>
     
-</div>
+      <div class="pointsDiv">
+        <select class="selectOptions" style="position: relative;" (change) = "analysisChange($event)">
+          <option value="BasicAnalysis"> Basic Analysis</option>
+          <option value="DentalAnalysis"> Dental Analysis </option>
+          <option value="VerticalAnalysis"> Vertical Analysis </option>
+          <option value="MandibularAnalysis"> Mandibular Analysis </option>
+          <option value="DownsAnalysis"> Downs Analysis </option>
+          <option selected value="steinerAnalysis"> Steiner Analysis </option>
+          <option> Mills-Eastman Analysis </option>
+          <option> Wits Appraisal </option> 
+          <option> Tweed's Triangle </option> 
+        </select>
+        
+      </div>
+   
 <div class="card-body right-menu">
     <h4 class=""> Points </h4>
     <table class = "menu-title">

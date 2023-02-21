@@ -20,10 +20,12 @@ const cephLogicHandler = {
         let pointData: any = {}
         let lineData: any = {}
         let angle_info: any  = {}
+        let magnificationCalibration: number
 
         pointData = payload.points;
         lineData = payload.lines;
         angle_info = payload.angles;
+        magnificationCalibration = payload.magnificationCalibration;
         // Object.keys(pointData).forEach((element:any) => {
         //     console.log(element)
         //     // element[element]['masterObjectId'] = new ObjectId(payload.ceph_id) 
@@ -51,6 +53,7 @@ const cephLogicHandler = {
         await LineModel.create(LineArr).then(result => {return result}).catch(err => console.log(err));
         await pointModel.create(newPointArr).then(result => {return result}).catch(err => console.log(err));
         await AngleModel.create(angle).then(result => {return result}).catch(err => console.log(err));
+        await cephMasterModel.updateOne({_id : new ObjectId(payload.ceph_id)}, {$set:{magnificationCalibration: magnificationCalibration}})
        
     },
 

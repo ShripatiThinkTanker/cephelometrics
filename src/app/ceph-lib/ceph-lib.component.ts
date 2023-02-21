@@ -7,6 +7,7 @@ import { calculateAngle } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
+import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -14,6 +15,7 @@ import { globalSettings } from '../utils/globalSettings';
 })
 export class CephLibComponent {
   imageURL: string | null = "";
+  
   instance : any;
   count:number = 0;
   pointName:string = "";
@@ -35,13 +37,21 @@ export class CephLibComponent {
   calibrationdistance : number = 0;
   calibrationdistanceinmm: number = 0;
 
-  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService){
+  magnifier:any;
+  calibrationMagnification = this.fb.group({
+    magnificationFactor : ['',Validators.required]
+  })
+
+  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder){
 
   }
 
   ngOnInit(){
+   
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
+
+
     // this.width = localStorage.getItem("width");
     // console.log(this.strinerAngles)
     // this.height = localStorage.getItem("height");
@@ -55,21 +65,23 @@ export class CephLibComponent {
       this.lineArr = result.data.lines;
       console.log(this.lineArr)
       result.data.points.forEach((element:any) => {
-          this.pointsArray[element.point_name_alias] = {
-            pointName : element.poinName,
-            x: element.x,
-            y: element.y,
-            point_name_alias : element.point_name_alias
-          }
+        this.pointsArray[element.point_name_alias] = {
+          pointName : element.poinName,
+          x: element.x,
+          y: element.y,
+          point_name_alias : element.point_name_alias
+        }
       })
       this.anglesArr = result.data.angles
     })
+    this.calibrationMagnification.patchValue({"magnificationFactor" : globalSettings.calibrationDistanceInmm.toString()})
+    console.log(this.calibrationMagnification)
   }
 
   get lines() {
 
     return (
-
+      
 			this.strinerAngles.map((angle) => angle.id).reduce((arr: string[], angleID) => {
         angleID.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
         return arr;
@@ -89,9 +101,10 @@ export class CephLibComponent {
 
 
            if(pointAID == "C1" && pointBID == "C2"){
+              this.magnifier = this.calibrationMagnification.value.magnificationFactor; 
               this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
               this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
-              this.calibrationDist = globalSettings.calibrationDistanceInmm/this.calibrationdistanceinmm 
+              this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
           }
           
           console.log(this.calibrationDist)
@@ -241,11 +254,13 @@ export class CephLibComponent {
   }
 
   submitPayload(){
+   
     this.payload = {
       "ceph_id" : atob(this.activatedRouter.snapshot.params['id']),
       "points" : this.pointsArray,
       "lines" : this.lines,
       "angles" : this.anglesValues,
+      "magnificationCalibration" : this.magnifier
     }
     this.cephService.uploadCephData(this.payload).subscribe((result)=> {
       console.log("data uploaded successfully")
