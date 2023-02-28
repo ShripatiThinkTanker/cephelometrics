@@ -8,6 +8,7 @@ import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -36,35 +37,41 @@ export class CephLibComponent {
   calibrationy2:number = 0;
   calibrationdistance : number = 0;
   calibrationdistanceinmm: number = 0;
-
+  tempPointArray:{[k:string] : IPoints} = {};
+  tempLineArr : Array<any> =  [];
+  tempanglesArr : Array<any> = [];
+  
   magnifier:any;
+  panZoomOptions = {disablePan:true}
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
   })
 
-  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder){
+  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder, public toasterService: ToastrService){
 
   }
 
   ngOnInit(){
-   
+    
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
-
-
-    // this.width = localStorage.getItem("width");
-    // console.log(this.strinerAngles)
-    // this.height = localStorage.getItem("height");
-    
-    
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
       this.count = Object.keys(result.data.points).length;
       console.log(this.count)
       console.log(result.data.points)
       this.imageURL = result.data.xray_data[0].dataImage;
+      this.tempLineArr = result.data.lines;
+    
       this.lineArr = result.data.lines;
       console.log(this.lineArr)
       result.data.points.forEach((element:any) => {
+        this.tempPointArray[element.point_name_alias] = {
+          pointName : element.poinName,
+          x: element.x,
+          y: element.y,
+          point_name_alias : element.point_name_alias
+        }
+
         this.pointsArray[element.point_name_alias] = {
           pointName : element.poinName,
           x: element.x,
@@ -72,9 +79,23 @@ export class CephLibComponent {
           point_name_alias : element.point_name_alias
         }
       })
+
+      result.data.points.forEach((element:any) => {
+        this.options.forEach((element1:any) => {
+          if(element.point_name_alias == element1.pointAlias){
+            element1.isActive = false
+          }
+        })
+      })
+      this.tempanglesArr = result.data.angles
       this.anglesArr = result.data.angles
+      if(result.data.xray_data[0].magnificationCalibration){
+
+        this.calibrationMagnification.patchValue({"magnificationFactor" : result.data.xray_data[0].magnificationCalibration.toString()})
+      }else{
+        this.calibrationMagnification.patchValue({"magnificationFactor" : globalSettings.calibrationDistanceInmm.toString()})
+      }
     })
-    this.calibrationMagnification.patchValue({"magnificationFactor" : globalSettings.calibrationDistanceInmm.toString()})
     console.log(this.calibrationMagnification)
   }
 
@@ -93,6 +114,7 @@ export class CephLibComponent {
         const pointBCoordinates = this.pointsArray[pointBID];
         var x1,x2,y1,y2,distance,left,top,angle,x_left,x_top,x_angle,distanceinmm, calibrationDist:any;
        
+        this.magnifier = this.calibrationMagnification.value.magnificationFactor; 
         if(pointACoordinates != undefined && pointBCoordinates != undefined){
            x1 = pointACoordinates.x;
 					 x2 = pointBCoordinates.x;
@@ -101,7 +123,6 @@ export class CephLibComponent {
 
 
            if(pointAID == "C1" && pointBID == "C2"){
-              this.magnifier = this.calibrationMagnification.value.magnificationFactor; 
               this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
               this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
               this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
@@ -111,14 +132,15 @@ export class CephLibComponent {
           
           distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
-          console.log(distanceinmm * this.calibrationDist)
-          left = Math.floor((x1 + x2) / 2 - distance / 2)  +5 ;
-          top = Math.floor((y1 + y2) / 2 - 1 / 2) + 5;
+          // console.log(distanceinmm * this.calibrationDist)
+          left = Math.floor((x1 + x2) / 2 - distance / 2) ;
+          top = Math.floor((y1 + y2) / 2 - 1 / 2);
           angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
  
-          x_left = Math.floor((x1 + x2) / 2 - 3000 / 2) + 5;
-          x_top = Math.floor((y1 + y2) / 2 - 1 / 2) + 5;
+          x_left = Math.floor((x1 + x2) / 2 - 3000 / 2);
+          x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
           x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
+          console.log(id)
         }
 
        
@@ -158,7 +180,7 @@ export class CephLibComponent {
 			const lineB:any = this.lines[lineBIndex];
 
       //let top =  lineA.top + 20
-			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB) : 'NA';
+			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert) : 'NA';
 
 			const max = angle.mean + angle.deviation;
 			const min = angle.mean - angle.deviation;
@@ -181,23 +203,30 @@ export class CephLibComponent {
 	}
 
   addPoint(event: MouseEvent){
-   
+    
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
     if(this.options.length > this.count + 1){
     this.previewImage = this.options[this.count + 1].imagePath;
     }
+      console.log(event.offsetX, event.offsetY)
+      if(event.offsetX < 10 && event.offsetY < 10) {
+       console.log("condition true")
+       return false
+      }
+    
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
-      x:event.offsetX,
-      y:event.offsetY,
+      x: event.offsetX - 3,
+      y:event.offsetY - 3,
       point_name_alias: this.pointNameAlias
     }
    
     this.lineArr = this.lines;
     this.anglesArr = this.anglesValues;
     this.count++;
+    return true
   }
 
   removePoint(index:number){
@@ -248,7 +277,9 @@ export class CephLibComponent {
 
   disableContextMenu(){
     //this.instance.pan(100, 100);
-    console.log(this.instance)
+    this.panZoomOptions.disablePan = false;
+
+    console.log(this.panZoomOptions)
     return false;
 
   }
@@ -263,13 +294,24 @@ export class CephLibComponent {
       "magnificationCalibration" : this.magnifier
     }
     this.cephService.uploadCephData(this.payload).subscribe((result)=> {
-      console.log("data uploaded successfully")
-      this.router.navigate(['cephelometrics'])
+      this.toasterService.success("data uploaded successfully","Data Submitted")
+      this.ngOnInit()
     })
   }
 
   goBackToMainPage(){
-    this.router.navigate(["cephelometrics"])
+    if(this.tempLineArr.length < this.lineArr.length || this.tempanglesArr.length < this.anglesArr.length || Object.keys(this.tempPointArray).length < Object.keys(this.tempPointArray).length){
+      if(confirm("Are you sure you want to quit without saving changes")){
+        this.router.navigate(["cephelometrics"])
+      }
+    }else{
+      this.router.navigate(["cephelometrics"])
+    }
   }
-
+  prevent(event:MouseEvent) {
+    event.preventDefault()
+  }
+  dontDrag(event:any){
+    event.preventDefault()
+  }
 }

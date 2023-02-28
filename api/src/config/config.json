@@ -1,6 +1,6 @@
 {
-    "mongooseUrl": {
-      "serverUrl": "mongodb://localhost:27017",
-      "db": "cephelometrics"
-    }
+  "mongooseUrl": {
+    "serverUrl": "mongodb+srv://shripatithinktanker:uHVIwxh8vqopAIXe@cluster0.ful0mlg.mongodb.net/?retryWrites=true&w=majority",
+    "db": "cephelometrics"
   }
+}

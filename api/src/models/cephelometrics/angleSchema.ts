@@ -8,7 +8,7 @@ const angleSchema = new mongoose.Schema({
   deviation: Number,
   value: String,
   interpretation: String,
-  name : String
+  name : String,
 });
 
 const AngleModel = mongoose.model('angles',angleSchema);

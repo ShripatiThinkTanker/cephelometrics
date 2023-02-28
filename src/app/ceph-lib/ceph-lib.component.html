@@ -11,23 +11,29 @@
   <div id="stack-canvas" id="divBG" [ngStyle]="{'width': '899px',
     'height': '750px',
     'position' : 'fixed',
-    'cursor' : 'crosshair'
-    
+    'cursor' : 'crosshair',
+    'border': '2px solid ',
+    'margin-left': '46%',
+    'margin-top': '20px'
   }">
-  <div class="overlay" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)" [ngStyle]=  "{'cursor':'crosshair'}">
-  <img src = "{{imageURL}}" width = "899" height = "800"/>
+  <div class="overlay" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)" (drag) = "dontDrag($event)" [ngStyle]=  "{'cursor':'crosshair'}" id = "image-container">
+  <img src = "{{imageURL}}" width = "899" height = "800" id = "image"/>
         <ng-container *ngFor="let points of pointsArray | keyvalue">
           <div draggable="true"
-            [ngStyle]="{'display':'block','position':'absolute', 'width':'10px', 'height':'10px','background-color':'red','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x +'px','z-index':1}">
+            [ngStyle]="{'display':'block','position':'absolute', 'width':'7px', 'height':'7px','background-color':'red','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x   +'px','z-index':1}">
           </div>
           <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'red','top': points.value.y  + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
 
         </ng-container> 
         <ng-container *ngFor="let line of lineArr">
           <ng-container *ngIf = "line.distanceinmm !== undefined">
-            <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '20px', 'top': line.top! + 40 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
-            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left+'px','top': line.top+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
-            <!-- <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(227, 227, 227)','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top+'px','width': line.x.x_distance+'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div> -->
+            <ng-container *ngIf = "line.showDistance">
+              <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '20px', 'top': line.top! + 43 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
+            </ng-container>
+            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left + 3 +'px','top': line.top + 3+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
+            <ng-container *ngIf = "line.id != 'C1-C2'">
+            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top + 3 +'px','width': line.x.x_distance + 3 +'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div>
+            </ng-container>
           </ng-container>
         </ng-container>
         
@@ -35,7 +41,7 @@
     </div>
     </div>
     <div class="right-menu-main">
-      <div class = "magnificationFactorInput">
+      <div class = "magnificationFactorInput" style = "z-index:100">
       Enter the Magnification Factor in mm
       <form [formGroup] = "calibrationMagnification">
         <input type = "text" formControlName="magnificationFactor"/>
@@ -43,8 +49,8 @@
       </div>
       <div class="right-menu-images">
         <div class="buttonGroups">
-          <button class = "btn btn-outline-success" (click) = "submitPayload()"> Submit </button>
-          <button class = "btn btn-outline-primary" (click) = "goBackToMainPage()"> Back </button>
+          <button class = "btn btn-outline-success" (click) = "submitPayload()"><mat-icon>save</mat-icon> Save </button>
+          <button class = "btn btn-outline-primary" (click) = "goBackToMainPage()"><mat-icon>cancel</mat-icon> Cancel </button>
         </div>
         
         <ng-container *ngIf="previewImage">

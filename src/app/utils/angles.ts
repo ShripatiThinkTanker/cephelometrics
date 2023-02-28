@@ -7,6 +7,8 @@ export interface Angle {
     inc : string;
     dec : string;
     norm : string;
+	invert ?:boolean;
+	showDistance?: boolean;
 }
 
 export const angles : {[k: string] : Angle} = {
@@ -17,7 +19,8 @@ export const angles : {[k: string] : Angle} = {
 		deviation: 2,
 		inc: 'Prognathic maxilla',
 		dec: 'Retrognathic maxilla',
-		norm: 'Normal anteroposterior position of the maxilla'
+		norm: 'Normal anteroposterior position of the maxilla',
+		showDistance : true
 	},
     'S-N^N-A': {
 		id: 'S-N^N-A',
@@ -80,8 +83,9 @@ export const angles : {[k: string] : Angle} = {
 		mean: 80,
 		deviation: 5.9,
 		inc: 'protrusive or prognathic maxilla',
-		dec: 'deficient or retrognathic maxilla',
-		norm: 'Straight skeletal profile'
+		dec: 'deficient or retrognathic maxillac',
+		norm: 'Straight skeletal profile',
+		invert : false
 	},
 	'Me-Go^ANS-PNS': {
 		id: 'Me-Go^ANS-PNS',
@@ -140,6 +144,7 @@ export const angles : {[k: string] : Angle} = {
 		inc: 'Clockwise rotation of the mandible growth, unfavorable hyperdivergent pattern',
 		dec: 'Counterclockwise rotation of the mandible growth',
 		norm: 'Normal mandible rotation',
+		invert:true
 		
 	},
 	'S-Gn^Po-Or': {

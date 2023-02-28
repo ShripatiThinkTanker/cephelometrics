@@ -10,8 +10,7 @@ export const convertImageToBase64URL = (items: FileList): boolean =>{
             reader.onload = (event: ProgressEvent<FileReader>) => {
                 const result = event.target?.result;
                 if (result && typeof result == "string") {
-                    console.log(result);
-                    localStorage.setItem("imageData", result); 
+                        localStorage.setItem("imageData", result); 
                         var memoryImg = document.createElement('img');
                         memoryImg.src = result;
                         var width = memoryImg.width;
@@ -29,7 +28,7 @@ export const convertImageToBase64URL = (items: FileList): boolean =>{
     return isLoaded;
 }
 
-export const calculateAngle = (lineA: any, lineB: any)=> {
+export const calculateAngle = (lineA: any, lineB: any,invert?:boolean)=> {
     
 		if (!(lineA.angle && lineB.angle)) {
 			return;
@@ -39,9 +38,9 @@ export const calculateAngle = (lineA: any, lineB: any)=> {
 			angle = angle - 180;
 		}
 
+        if (invert) {
+			angle = 180 - angle;
+		}
+
 		return Math.round(angle * 10) / 10;
 }
-
-// function loadFile(item: File){
-   
-// }

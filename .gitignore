@@ -5,11 +5,12 @@
 /tmp
 /out-tsc
 /bazel-out
-
+*.zip
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+Cephelometrics.pem
 
 # IDEs and editors
 .idea/
