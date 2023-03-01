@@ -55,15 +55,25 @@ const cephLogicHandler = {
         var line_resCount = 0;
         var point_resCount = 0;
         var angle_resCount = 0;
-
+        var message = "";
         if(lineResult.length > 0){
-           line_resCount =  await LineModel.remove({"masterObjectId": new ObjectId(payload.ceph_id)})
+            LineModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)}).exec((err)=>{
+                if(err) {
+                    console.log(err);
+                }
+                message += "Deleted line";
+            })
+               
+            
         }
         if(pointResult.length > 0){
-            point_resCount = await pointModel.remove({"masterObjectId": new ObjectId(payload.ceph_id)})
+             pointModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)}).exec((err)=> {
+                message += "Deleted points";
+             })
+
         }
         if(angleResult.length > 0){
-            angle_resCount = await AngleModel.remove({"masterObjectId" : new ObjectId(payload.ceph_id)})
+            await AngleModel.deleteMany({"masterObjectId" : new ObjectId(payload.ceph_id)})
         }
         await LineModel.create(LineArr).then(result => {return result}).catch(err => console.log(err));
         await pointModel.create(newPointArr).then(result => {return result}).catch(err => console.log(err));

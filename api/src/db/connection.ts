@@ -1,5 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 import * as config from "../config/config.json";
 export const connection = async()=> {
-    await mongoose.connect(config.mongooseUrl.serverUrl + "/"+config.mongooseUrl.db).then(res => console.log("Connection made Successfully")).catch(err => console.log(err));
+    console.log(config.mongooseUrl.serverUrl + "/"+config.mongooseUrl.db)
+    mongoose.connect("mongodb+srv://shripatithinktanker:uHVIwxh8vqopAIXe@cluster0.ful0mlg.mongodb.net/cephelometrics",
+    {useNewUrlParser: true,
+    useUnifiedTopology: true
+  } as ConnectOptions).then((res) => {
+    console.log('Connected to Distribution API Database - Initial Connection')
+  }).catch((err) => {
+    console.log(
+      `Initial Distribution API Database connection error occured -`,
+      err
+    );
+  });
 }
