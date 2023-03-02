@@ -24,6 +24,7 @@
     "@types/fabric": "^5.3.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
+    "dotenv": "^16.0.3",
     "fabric": "^5.3.0",
     "ngx-panzoom": "^15.0.0",
     "ngx-toastr": "^16.0.2",

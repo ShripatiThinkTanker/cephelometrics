@@ -75,9 +75,9 @@ const cephLogicHandler = {
         if(angleResult.length > 0){
             await AngleModel.deleteMany({"masterObjectId" : new ObjectId(payload.ceph_id)})
         }
-        await LineModel.create(LineArr).then(result => {return result}).catch(err => console.log(err));
-        await pointModel.create(newPointArr).then(result => {return result}).catch(err => console.log(err));
-        await AngleModel.create(angle).then(result => {return result}).catch(err => console.log(err));
+        await LineModel.create(LineArr)
+        await pointModel.create(newPointArr)
+        await AngleModel.create(angle)
         await cephMasterModel.updateOne({_id : new ObjectId(payload.ceph_id)}, {$set:{magnificationCalibration: magnificationCalibration}})
         return {line: line_resCount, point : point_resCount, angle : angle_resCount}
     },

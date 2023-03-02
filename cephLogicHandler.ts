@@ -52,12 +52,25 @@ const cephLogicHandler = {
         const lineResult = await LineModel.find({"masterObjectId" : new ObjectId(payload.ceph_id)}).select('-__v');
         const pointResult = await pointModel.find({"masterObjectId" : new ObjectId(payload.ceph_id)}).select('-__v');
         const angleResult = await AngleModel.find({"masterObjectId" : new ObjectId(payload.ceph_id)}).select('-__v');
-
+        var line_resCount = 0;
+        var point_resCount = 0;
+        var angle_resCount = 0;
+        var message = "";
         if(lineResult.length > 0){
-            await LineModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)})
+            LineModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)}).exec((err)=>{
+                if(err) {
+                    console.log(err);
+                }
+                message += "Deleted line";
+            })
+               
+            
         }
         if(pointResult.length > 0){
-            await pointModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)})
+             pointModel.deleteMany({"masterObjectId": new ObjectId(payload.ceph_id)}).exec((err)=> {
+                message += "Deleted points";
+             })
+
         }
         if(angleResult.length > 0){
             await AngleModel.deleteMany({"masterObjectId" : new ObjectId(payload.ceph_id)})
@@ -66,7 +79,7 @@ const cephLogicHandler = {
         await pointModel.create(newPointArr).then(result => {return result}).catch(err => console.log(err));
         await AngleModel.create(angle).then(result => {return result}).catch(err => console.log(err));
         await cephMasterModel.updateOne({_id : new ObjectId(payload.ceph_id)}, {$set:{magnificationCalibration: magnificationCalibration}})
-       
+        return {line: line_resCount, point : point_resCount, angle : angle_resCount}
     },
 
     "getCephData" : async(id:string) => {
