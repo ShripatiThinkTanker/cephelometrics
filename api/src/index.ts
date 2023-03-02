@@ -21,6 +21,6 @@ if (process.env.ENVIRONMENT == 'Production') {
   });
 }
 
-appIndex.listen(5000, () => {
+appIndex.listen(8000, () => {
   console.log('App Running on port 5000');
 });
