@@ -5,6 +5,7 @@ const app = express.Router();
 
 
 app.get("/all-xrays", async (req:Request, res:Response) => {
+    console.log("Reached this endpoint")
     const all_xrays = await cephLogicHandler.listAllImages();
     res.send({"all_xrays" : all_xrays})
 })
