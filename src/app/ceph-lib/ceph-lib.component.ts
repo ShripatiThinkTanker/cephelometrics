@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
-import { basicPoints, pointList, steinerPoints } from '../utils/steinerPoints';
+import {pointList, steinerPoints } from '../utils/steinerPoints';
 import { calculateAngle } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
@@ -40,7 +40,7 @@ export class CephLibComponent {
   tempPointArray:{[k:string] : IPoints} = {};
   tempLineArr : Array<any> =  [];
   tempanglesArr : Array<any> = [];
-  
+  allPointsCompleted:boolean = false
   magnifier:any;
   div:any;
   panZoomOptions = {disablePan:true}
@@ -205,10 +205,19 @@ export class CephLibComponent {
 	}
 
   addPoint(event: MouseEvent){
-    
+    console.log(this.count)
+    if(this.options[this.count] != undefined){
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
+    
+    if(this.count == this.options.length){
+      console.log(true)
+      this.allPointsCompleted = true 
+    }else{
+      console.log(this.options.length,this.count)
+      console.log(false)
+    }
     if(this.options.length > this.count + 1){
     this.previewImage = this.options[this.count + 1].imagePath;
     }
@@ -228,12 +237,13 @@ export class CephLibComponent {
     this.lineArr = this.lines;
     this.anglesArr = this.anglesValues;
     this.count++;
+  }
     return true
   }
 
   removePoint(index:number){
      this.options[index].isActive = true;
-
+     this.allPointsCompleted = false 
      let newPoints = Object.keys(this.pointsArray)
 
      
@@ -263,7 +273,6 @@ export class CephLibComponent {
   analysisChange(event:any){
     const options:any = {
       steinerAnalysis : steinerPoints,
-      BasicAnalysis :  basicPoints
     }
     console.log(event.target.value)
     this.options = options[event.target.value]

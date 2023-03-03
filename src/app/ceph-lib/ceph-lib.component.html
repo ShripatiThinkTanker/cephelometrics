@@ -60,22 +60,16 @@
     
       <div class="pointsDiv">
         <select class="selectOptions" style="position: relative;" (change) = "analysisChange($event)">
-          <option value="BasicAnalysis"> Basic Analysis</option>
-          <option value="DentalAnalysis"> Dental Analysis </option>
-          <option value="VerticalAnalysis"> Vertical Analysis </option>
-          <option value="MandibularAnalysis"> Mandibular Analysis </option>
-          <option value="DownsAnalysis"> Downs Analysis </option>
           <option selected value="steinerAnalysis"> Steiner Analysis </option>
-          <option> Mills-Eastman Analysis </option>
-          <option> Wits Appraisal </option> 
-          <option> Tweed's Triangle </option> 
         </select>
         
       </div>
    
 <div class="card-body right-menu">
-    <h4 class=""> Points </h4>
-    <table class = "menu-title">
+  <div style = "position: fixed;background-color:rgb(236, 236, 236); width: 18.5%;">
+    <h4> Points </h4> <span style = "margin-left: 158px"> All Points marked  <ng-container *ngIf = "allPointsCompleted else cond5"><b>Yes</b> </ng-container> <ng-template #cond5> <b>No</b> </ng-template></span>
+    </div>
+    <table class = "menu-title" style = "margin-top: 50px;">
 
       <tr *ngFor="let option of options let i = index">
           <ng-container *ngIf="option.isActive else cond2">
