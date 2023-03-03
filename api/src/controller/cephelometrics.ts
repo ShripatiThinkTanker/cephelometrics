@@ -3,7 +3,9 @@ import cephLogicHandler from "../data/cephLogicHandler";
 
 const app = express.Router();
 
-
+app.get("/hello", (req, res) => {
+    res.send({"message" : "Hello World"})
+})
 app.get("/all-xrays", async (req:Request, res:Response) => {
     console.log("Reached this endpoint")
     const all_xrays = await cephLogicHandler.listAllImages();
