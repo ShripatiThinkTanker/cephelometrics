@@ -2,7 +2,7 @@ import mongoose, { ConnectOptions } from "mongoose";
 
 require("dotenv").config();
 export const connection = async()=> {
-    mongoose.connect("mongodb://admin:password@176.32.81.54:27017?authMechanism=DEFAULT",
+    mongoose.connect("mongodb+srv://shripati:hoSEDJk5LhJMFYgS@cephelometrics.ep8yigr.mongodb.net/?retryWrites=true&w=majority",
     {useNewUrlParser: true,
     useUnifiedTopology: true
   } as ConnectOptions).then((res) => {
