@@ -42,6 +42,7 @@ export class CephLibComponent {
   tempanglesArr : Array<any> = [];
   
   magnifier:any;
+  div:any;
   panZoomOptions = {disablePan:true}
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
@@ -55,6 +56,7 @@ export class CephLibComponent {
     
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
+    this.div = document.querySelector('.overlay') as HTMLDivElement;
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
       this.count = Object.keys(result.data.points).length;
       console.log(this.count)
@@ -133,7 +135,7 @@ export class CephLibComponent {
           distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
           // console.log(distanceinmm * this.calibrationDist)
-          left = Math.floor((x1 + x2) / 2 - distance / 2) ;
+          left = Math.floor((x1 + x2) / 2 - distance / 2);
           top = Math.floor((y1 + y2) / 2 - 1 / 2);
           angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
  

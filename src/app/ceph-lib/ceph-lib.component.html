@@ -110,13 +110,26 @@
         </tr>
         <ng-container *ngFor="let results of anglesArr">
           <ng-container *ngIf = "results.id != 'C1-C2^C2-C1'">
-            <tr>
-                <td>{{results.name}} </td>
-                <td> {{results.mean}}° </td>
-                <td> {{results.value}}° </td>
-                <td> {{results.interpretation}} </td>
+            <ng-container *ngIf = "results.value <= results.mean else cond4">
+            <tr style = "background-color: green;">
+                <td color = "red">{{results.name}} </td>
+                <td color = "red"> {{results.mean}}° </td>
+                <td color = "red"> {{results.value}}° </td>
+                <td color = "red"> {{results.interpretation}} </td>
                
             </tr>
+            </ng-container>
+
+            <ng-template #cond4>
+              <tr style = "background-color: red;">
+                  <td color = "green">{{results.name}} </td>
+                  <td color = "green"> {{results.mean}}° </td>
+                  <td color = "green"> {{results.value}}° </td>
+                  <td color = "green"> {{results.interpretation}} </td>
+                 
+              </tr>
+              </ng-template>
+
         </ng-container>
         </ng-container>
         
@@ -125,3 +138,4 @@
 </div> 
 
 
+""
