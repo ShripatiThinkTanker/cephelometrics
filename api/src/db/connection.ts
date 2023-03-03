@@ -6,7 +6,7 @@ export const connection = async()=> {
     {useNewUrlParser: true,
     useUnifiedTopology: true
   } as ConnectOptions).then((res) => {
-    console.log('Connected to Distribution API Database - Initial Connection', "With URL" + "mongodb://admin:password@176.32.81.54:27017?authMechanism=DEFAULT")
+    console.log('Connected to Distribution API Database - Initial Connection', "With URL" + "mongodb+srv://shripati:hoSEDJk5LhJMFYgS@cephelometrics.ep8yigr.mongodb.net/?retryWrites=true&w=majority")
   }).catch((err) => {
     console.log(
       `Initial Distribution API Database connection error occured -`,
