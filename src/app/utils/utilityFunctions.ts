@@ -28,7 +28,7 @@ export const convertImageToBase64URL = (items: FileList): boolean =>{
     return isLoaded;
 }
 
-export const calculateAngle = (lineA: any, lineB: any,invert?:boolean)=> {
+export const calculateAngle = (lineA: any, lineB: any,invert?:boolean, abs?:boolean)=> {
     
 		if (!(lineA.angle && lineB.angle)) {
 			return;
@@ -41,6 +41,9 @@ export const calculateAngle = (lineA: any, lineB: any,invert?:boolean)=> {
         if (invert) {
 			angle = 180 - angle;
 		}
+        if(abs) {
+            angle = Math.abs(angle)
+        }
 
 		return Math.round(angle * 10) / 10;
 }

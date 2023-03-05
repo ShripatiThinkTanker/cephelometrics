@@ -77,7 +77,7 @@ export const steinerPoints: Array<pointList> = [
     {
         pointName: 'Gnathion (Gn)',
         isActive: true,
-        pointAlias: 'G',
+        pointAlias: 'Gn',
         imagePath: '',
     },
 

@@ -8,7 +8,8 @@ export interface Angle {
     dec : string;
     norm : string;
 	invert ?:boolean;
-	showDistance?: boolean;
+	typeOfMeasurement ?: string;
+	abs?: boolean;
 }
 
 export const angles : {[k: string] : Angle} = {
@@ -20,8 +21,9 @@ export const angles : {[k: string] : Angle} = {
 		inc: 'Prognathic maxilla',
 		dec: 'Retrognathic maxilla',
 		norm: 'Normal anteroposterior position of the maxilla',
-		showDistance : true
+		typeOfMeasurement : "Linear",
 	},
+	//SNA
     'S-N^N-A': {
 		id: 'S-N^N-A',
 		name : "SNA",
@@ -30,8 +32,10 @@ export const angles : {[k: string] : Angle} = {
 		deviation: 2,
 		inc: 'Prognathic maxilla',
 		dec: 'Retrognathic maxilla',
-		norm: 'Normal anteroposterior position of the maxilla'
+		norm: 'Normal anteroposterior position of the maxilla',
+		typeOfMeasurement : "Angular"
 	},
+	//SNB
 	'S-N^N-B': {
 		id: 'S-N^N-B',
 		name: 'SNB',
@@ -40,8 +44,10 @@ export const angles : {[k: string] : Angle} = {
 		deviation: 2,
 		inc: 'Prognathic mandible',
 		dec: 'Retrognathic mandible',
-		norm: 'Normal anteroposterior position of the mandible'
+		norm: 'Normal anteroposterior position of the mandible',
+		typeOfMeasurement : "Angular",
 	},
+	//ANB
 	'N-B^N-A': {
 		id: 'N-B^N-A',
 		description: 'ANB, a relative determination of the relation­ship of the maxilla to the mandible.',
@@ -50,91 +56,76 @@ export const angles : {[k: string] : Angle} = {
 		deviation: 2,
 		inc: 'Skeletal Class II relationship',
 		dec: 'Skeletal Class III relationship',
-		norm: 'Skeletal Class I relationship'
-	},
-	'N-A^A-Pog': {
-		id: 'N-A^A-Pog',
-		description:
-			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
-		name: 'NAPog',
-		mean: 0,
-		deviation: 5.9,
-		inc: 'Concave skeletal profile',
-		dec: 'Convex skeletal profile',
-		norm: 'Straight skeletal profile'
-	},
+		norm: 'Skeletal Class I relationship',
+		typeOfMeasurement : "Angular",
+	}, 
+	//SN-Pg
 	'S-N^Pog-N': {
 		id: 'S-N^Pog-N',
-		name : "SN-NP",
+		name : "SN-Pg",
 		description:
 			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
 		mean: 80,
 		deviation: 5.9,
 		inc: 'Concave skeletal profile',
 		dec: 'Convex skeletal profile',
-		norm: 'Straight skeletal profile'
+		norm: 'Straight skeletal profile',
+		typeOfMeasurement : "Angular",
 	},
-
-	'Pog-N^P-O': {
-		id: 'Pog-N^P-O',
-		name : "NA-FH",
+	//NPg-FH
+	'P-O^N-Pog': {
+		id: 'P-O^N-Pog',
+		name : "NPg-FH",
 		description:
 			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
-		mean: 80,
+		mean: 87,
 		deviation: 5.9,
 		inc: 'protrusive or prognathic maxilla',
 		dec: 'deficient or retrognathic maxillac',
 		norm: 'Straight skeletal profile',
-		invert : false
+		invert : false,
+		abs : true,
+		typeOfMeasurement : "Angular",
 	},
-	'Me-Go^ANS-PNS': {
-		id: 'Me-Go^ANS-PNS',
+	//FH-MP
+	'P-O^Me-Go' : {
+		id : 'P-O^Me-Go',
+		name : 'FH-MP',
+		description : "Also known as Frankfort Mandibular-Plane Angle (FMA) many orthodontists prefer to use Frankfort Horizontal than SN.",
+		mean : 24,
+		deviation : 3,
+		inc : 'Skeletal open bite, increases facial height',
+		dec: 'Skeletal deep bite, decreases facial height',
+		norm: 'Normal skeletal bite, normal facial height',
+		invert:true,
+		typeOfMeasurement : "Angular"
+	},
+	//LAFH
+	'AN-Me^': {
+		id: 'AN-Me^',
+		name : "LAFH",
 		description: 'MMPA, maxillary-mandibular plane angle',
 		mean: 27,
 		deviation: 5,
 		inc: 'Skeletal open bite, increases facial height',
 		dec: 'Skeletal deep bite, decreases facial height',
-		norm: 'Normal skeletal bite, normal facial height'
+		norm: 'Normal skeletal bite, normal facial height',
+		typeOfMeasurement : "Linear",
 	},
-	'S-N^ANS-PNS': {
-		id: 'S-N^ANS-PNS',
+	// //UAFH
+	'AN-N^': {
+		id: 'AN-N^',
+		name : 'UAFH',
 		description: 'Maxillary plane to cranial base',
 		mean: 8,
 		deviation: 3,
 		inc: 'Increased maxillary plane downward growth',
 		dec: 'Decreased maxillary plane downward growth',
 		norm: 'Normal maxillary plane growth',
+		typeOfMeasurement : "Linear"
 		
 	},
-	'UIe-UIa^LIe-LIa': {
-		id: 'UIe-UIa^LIe-LIa',
-		description: 'Interincisal angle',
-		mean: 135,
-		deviation: 10,
-		inc: 'Increased interincisal angle, dolichocephalic characteristic',
-		dec: 'Decreased interincisal angle, brachycephalic characteristic',
-		norm: 'Normal interincisal angle'
-	},
-	'S-N^UIe-UIa': {
-		id: 'S-N^UIe-UIa',
-		description:
-			'Line through the long axis of the upper incisors forms an angle with the SN plane horizontal. Measures the inclination of the upper incisors to the SN plane',
-		mean: 103,
-		deviation: 6,
-		inc: 'Increased upper incisor inclination',
-		dec: 'Decreased upper incisor inclination',
-		norm: 'Normal upper incisor inclination'
-	},
-	'Me-Go^LIe-LIa': {
-		id: 'Me-Go^LIe-LIa',
-		description:
-			'IMPA, Line through the long axis of the lower incisors forms an angle with the mandibular plane. Measures the inclination of the lower incisors to the mandible plane',
-		mean: 93,
-		deviation: 8,
-		inc: 'Increased lower incisor inclination',
-		dec: 'Decreased lower incisor inclination',
-		norm: 'Normal lower incisor inclination'
-	},
+	// SN-MP
 	'S-N^Me-Go': {
 		id: 'S-N^Me-Go',
 		name : "SN-MP",
@@ -142,88 +133,58 @@ export const angles : {[k: string] : Angle} = {
 		mean: 32,
 		deviation: 5,
 		inc: 'Clockwise rotation of the mandible growth, unfavorable hyperdivergent pattern',
-		dec: 'Counterclockwise rotation of the mandible growth',
 		norm: 'Normal mandible rotation',
-		invert:true
+		dec: 'Counterclockwise rotation of the mandible growth',
+		invert:true,
+		typeOfMeasurement : "Angular"
 		
 	},
-	'S-Gn^Po-Or': {
-		id: 'S-Gn^Po-Or',
+	// Y-Axis SN
+	'S-N^Gn-S': {
+		id: 'S-N^Gn-S',
+		name : "Y-Axis SN",
 		description:
-			'Y-Axis, SGn-FH, Anteroinferior angle formed by the intersect­ion of a line drawn from sella to gnathion and the Frankfort horizontal, determines the overall growth pattern of the face',
-		mean: 59,
+			'Y-Axis, SN, Anteroinferior angle formed by the intersect­ion of a line drawn from sella to gnathion and the Frankfort horizontal, determines the overall growth pattern of the face',
+		mean: 66,
 		deviation: 4,
 		inc:
-			'Clockwise rotation of the mandible growth, vertical growth exceeding horizontal growth pattern, downward position of the chin in relation to upper face.',
+			'Class II division 2 cases usually have a smaller Y-axis',
 		dec:
-			'Counterclockwise rotation of the mandible growth, horizontal growth exceeding vertical growth, upward position of the chin in relation to upper face.',
-		norm: 'Normal mandible rotation'
+			'Class II division 1 cases usually have an average to high Y- axis.',
+		norm: 'Normal mandible rotation',
+		invert : true,
+		typeOfMeasurement : "Angular"
 	},
-	'Me-Go^Po-Or': {
-		id: 'Me-Go^Po-Or',
-		description: 'FMA, Frankfurt mandibular plane angle',
-		mean: 27,
-		deviation: 5,
-		inc: 'Clockwise rotation of the mandible growth, increases facial height',
-		dec: 'Counterclockwise rotation of the mandible growth, decreases facial height',
-		norm: 'Normal mandible rotation, normal facial height'
+	// Y-Axis FH
+	"P-O^Gn-Go":{
+		id : 'P-O^Gn-Go',
+		name : "Y-Axis FH",
+		description : "The same interpretation as above using Sella-Nasion. Many orthodontists prefer to use Frankfort Horizontal than SN.",
+		mean : 59,
+		deviation : 3,
+		inc : 'Class II division 2 cases usually have a smaller Y-axis',
+		dec : 'Class II division 1 cases usually have an average to high Y- axis.',
+		norm  : "Normal mandible rotation",
+		invert : true,
+		typeOfMeasurement : "Angular"
+
 	},
-	'LIe-LIa^Po-Or': {
-		id: 'LIe-LIa^Po-Or',
-		description: 'FMIA, Line through the long axis of the lower incisors forms an angle with the Frankfurt plane.',
-		mean: 67,
-		deviation: 2.5,
-		inc: '',
-		dec: '',
-		norm: '',
-		
-	},
-	'N-Pog^Po-Or': {
-		id: 'N-Pog^Po-Or',
+
+	//NA-FH
+	'P-O^N-A': {
+		id: 'P-O^N-A',
+		name : 'NA-FH',
 		description:
 			'Facial Angle, Frankfort plane with N-Pog, measure the degree of retrusion or protrusion of the lower jaw.',
-		mean: 87.8,
+		mean: 87,
 		deviation: 3.6,
 		dec: 'Prominent, prognathic chin & mandible',
 		inc: 'Retrognathic chin, mandible',
-		norm: 'Normal chin, mandible'
+		norm: 'Normal chin, mandible',
+		invert: true,
+		abs:true,
+		typeOfMeasurement : "Angular"
 	},
-	'N-Pog^A-B': {
-		id: 'N-Pog^A-B',
-		description:
-			'The A–B plane in relation to the facial plane (N–Pog) relates the anterior limit of the dentition to the facial profile',
-		mean: -4.6,
-		deviation: 3.8,
-		dec: 'dentition is out of the profile limit',
-		inc: 'dentition is out of the profile limit',
-		norm: 'dentition is within profile limit'
-	},
-	'Ms-Mi^Po-Or': {
-		id: 'Ms-Mi^Po-Or',
-		description: 'Cant of the occlusal plane in relation to the Frankfort plane',
-		mean: 9.3,
-		deviation: 8.3,
-		dec: 'decreased slope of occlusal plane',
-		inc: 'increased slope of occlusal plane, indicative of Class II',
-		norm: 'normal slope of occlusal plane'
-	},
-	'LIa-LIe^Ms-Mi': {
-		id: 'LIa-LIe^Ms-Mi',
-		description: 'Axial inclination of the mandibular incisors to the occlusal plane',
-		mean: 90 + 14.5,
-		deviation: 3.5,
-		dec: 'decreased inclination',
-		inc: 'increased inclination',
-		norm: 'normal inclination'
-	},
-	'S-N^OLp-OLa': {
-		id: 'S-N^OLp-OLa',
-		description: 'Relating the occlusal plane to the SN plane.',
-		mean: 14.5,
-		deviation: 4,
-		dec: 'skeletal deep bite, horizontally growing pattern',
-		inc: 'skeletal open bite, vertically growing pattern',
-		norm: 'normal relation',
-		
-	}
+	
+	
 }

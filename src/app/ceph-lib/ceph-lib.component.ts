@@ -23,7 +23,7 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['Pog-N^P-O']];
+  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go'], angles['AN-Me^'], angles['AN-N^']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -53,7 +53,7 @@ export class CephLibComponent {
   }
 
   ngOnInit(){
-    
+    console.log(this.strinerAngles)
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
     this.div = document.querySelector('.overlay') as HTMLDivElement;
@@ -102,11 +102,9 @@ export class CephLibComponent {
   }
 
   get lines() {
-
     return (
-      
-			this.strinerAngles.map((angle) => angle.id).reduce((arr: string[], angleID) => {
-        angleID.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
+      this.strinerAngles.map((angle) => angle).reduce((arr: string[], angleID) => {
+        angleID.id.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
         return arr;
       }, [])).map((id) => {
         const pointAID:string = id.split('-')[0];
@@ -114,10 +112,11 @@ export class CephLibComponent {
         
         const pointACoordinates = this.pointsArray[pointAID];
         const pointBCoordinates = this.pointsArray[pointBID];
-        var x1,x2,y1,y2,distance,left,top,angle,x_left,x_top,x_angle,distanceinmm, calibrationDist:any;
+        var x1,x2,y1,y2,distance,left,top,angle,x_left,x_top,x_angle,distanceinmm,typeOfMeasurement,calibrationDist:any;
        
         this.magnifier = this.calibrationMagnification.value.magnificationFactor; 
         if(pointACoordinates != undefined && pointBCoordinates != undefined){
+          this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
            x1 = pointACoordinates.x;
 					 x2 = pointBCoordinates.x;
 					 y1 = pointACoordinates.y;
@@ -127,7 +126,6 @@ export class CephLibComponent {
            if(pointAID == "C1" && pointBID == "C2"){
               this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
               this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
-              this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
           }
           
           console.log(this.calibrationDist)
@@ -138,7 +136,6 @@ export class CephLibComponent {
           left = Math.floor((x1 + x2) / 2 - distance / 2);
           top = Math.floor((y1 + y2) / 2 - 1 / 2);
           angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
- 
           x_left = Math.floor((x1 + x2) / 2 - 3000 / 2);
           x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
           x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
@@ -182,7 +179,7 @@ export class CephLibComponent {
 			const lineB:any = this.lines[lineBIndex];
 
       //let top =  lineA.top + 20
-			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert) : 'NA';
+			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert, angle.abs) : 'NA';
 
 			const max = angle.mean + angle.deviation;
 			const min = angle.mean - angle.deviation;
@@ -235,6 +232,7 @@ export class CephLibComponent {
     }
    
     this.lineArr = this.lines;
+    console.log(this.lineArr)
     this.anglesArr = this.anglesValues;
     this.count++;
   }

@@ -27,7 +27,7 @@
         </ng-container> 
         <ng-container *ngFor="let line of lineArr">
           <ng-container *ngIf = "line.distanceinmm !== undefined">
-            <ng-container *ngIf = "line.showDistance">
+            <ng-container *ngIf = "line.id == 'AN-N^' || line.id == 'C1-C2^' || line.id == 'AN-Me^'">
               <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '20px', 'top': line.top! + 43 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
             </ng-container>
             <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left + 3 +'px','top': line.top + 3+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
