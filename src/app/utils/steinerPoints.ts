@@ -100,27 +100,9 @@ export const steinerPoints: Array<pointList> = [
         imagePath: '',
     },
     {
-        pointName: 'Palatal roof',
-        isActive: true,
-        pointAlias: 'pr',
-        imagePath: '',
-    },
-    {
         pointName: 'Articulare (Ar)',
         isActive: true,
         pointAlias: 'Ar',
-        imagePath: '',
-    },
-    {
-        pointName: 'Porion (Po)',
-        isActive: true,
-        pointAlias: 'Po',
-        imagePath: '',
-    },
-    {
-        pointName: 'Key ridges',
-        isActive: true,
-        pointAlias: 'kr',
         imagePath: '',
     },
     {

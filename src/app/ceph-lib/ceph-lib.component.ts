@@ -167,22 +167,37 @@ export class CephLibComponent {
     }
     return - 1;
   }
+  calculateDistance(x1:number,x2:number,y1:number,y2:number) {
+    let distanceinmm;
+          // distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+          distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
+  }
   get anglesValues() {
 		return this.strinerAngles.map((angle) => {
-			const lineAID = angle.id.split('^')[0];
-			const lineBID = angle.id.split('^')[1];
+      var lineAID:string,lineBID:string;
+      var pointAID:string,pointBID:string
+      if(angle.id.split('^').length > 2){
 
-			const lineAIndex = this.findIndex(this.lines, (line:any) => line.id === lineAID);
-			const lineBIndex = this.findIndex(this.lines, (line:any) => line.id === lineBID);
+         lineAID = angle.id.split('^')[0];
+         lineBID = angle.id.split('^')[1];
+      }else{
+         pointAID = angle.id.split('^')[0].split('-')[0];
+         pointBID = angle.id.split('^')[0].split('-')[1];
 
-			const lineA:any = this.lines[lineAIndex];
-			const lineB:any = this.lines[lineBIndex];
-
-      //let top =  lineA.top + 20
-			const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert, angle.abs) : 'NA';
-
-			const max = angle.mean + angle.deviation;
-			const min = angle.mean - angle.deviation;
+        console.log(pointAID,pointBID)
+      }
+        const lineAIndex = this.findIndex(this.lines, (line:any) => line.id === lineAID);
+        const lineBIndex = this.findIndex(this.lines, (line:any) => line.id === lineBID);
+  
+        const lineA:any = this.lines[lineAIndex];
+        const lineB:any = this.lines[lineBIndex];
+  
+        //let top =  lineA.top + 20
+        const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert, angle.abs) : 'NA';
+  
+        const max = angle.mean + angle.deviation;
+        const min = angle.mean - angle.deviation;
+      
 
 			return {
 				id: angle.id,
@@ -200,6 +215,8 @@ export class CephLibComponent {
 			};
 		});
 	}
+
+ 
 
   addPoint(event: MouseEvent){
     console.log(this.count)
