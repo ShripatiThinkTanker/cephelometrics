@@ -3,12 +3,13 @@ import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
 import {pointList, steinerPoints } from '../utils/steinerPoints';
-import { calculateAngle } from '../utils/utilityFunctions';
+import { calculateAngle, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { distance } from '../utils/distance';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -23,7 +24,8 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go'], angles['AN-Me^'], angles['AN-N^']];
+  steinerDistance = [distance['ANS-Me^'], distance['ANS-N^']]
+  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -43,6 +45,9 @@ export class CephLibComponent {
   allPointsCompleted:boolean = false
   magnifier:any;
   div:any;
+  element:any;
+  pointAID:any;
+  pointBID:any;
   panZoomOptions = {disablePan:true}
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
@@ -53,19 +58,19 @@ export class CephLibComponent {
   }
 
   ngOnInit(){
-    console.log(this.strinerAngles)
+    
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
+    this.element = document.querySelector('.card-body') as HTMLElement;
     this.div = document.querySelector('.overlay') as HTMLDivElement;
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
       this.count = Object.keys(result.data.points).length;
-      console.log(this.count)
-      console.log(result.data.points)
+     
       this.imageURL = result.data.xray_data[0].dataImage;
       this.tempLineArr = result.data.lines;
     
       this.lineArr = result.data.lines;
-      console.log(this.lineArr)
+     
       result.data.points.forEach((element:any) => {
         this.tempPointArray[element.point_name_alias] = {
           pointName : element.poinName,
@@ -98,7 +103,7 @@ export class CephLibComponent {
         this.calibrationMagnification.patchValue({"magnificationFactor" : globalSettings.calibrationDistanceInmm.toString()})
       }
     })
-    console.log(this.calibrationMagnification)
+    
   }
 
   get lines() {
@@ -107,7 +112,7 @@ export class CephLibComponent {
         angleID.id.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
         return arr;
       }, [])).map((id) => {
-        const pointAID:string = id.split('-')[0];
+        const pointAID = id.split('-')[0];
         const pointBID = id.split('-')[1];
         
         const pointACoordinates = this.pointsArray[pointAID];
@@ -123,12 +128,12 @@ export class CephLibComponent {
 					 y2 = pointBCoordinates.y;
 
 
-           if(pointAID == "C1" && pointBID == "C2"){
+           if(this.pointAID == "C1" && this.pointBID == "C2"){
               this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
               this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
           }
           
-          console.log(this.calibrationDist)
+          
           
           distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
@@ -139,7 +144,7 @@ export class CephLibComponent {
           x_left = Math.floor((x1 + x2) / 2 - 3000 / 2);
           x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
           x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
-          console.log(id)
+          
         }
 
        
@@ -172,40 +177,33 @@ export class CephLibComponent {
           // distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
   }
+
   get anglesValues() {
 		return this.strinerAngles.map((angle) => {
       var lineAID:string,lineBID:string;
-      var pointAID:string,pointBID:string
-      if(angle.id.split('^').length > 2){
-
          lineAID = angle.id.split('^')[0];
          lineBID = angle.id.split('^')[1];
-      }else{
-         pointAID = angle.id.split('^')[0].split('-')[0];
-         pointBID = angle.id.split('^')[0].split('-')[1];
 
-        console.log(pointAID,pointBID)
-      }
         const lineAIndex = this.findIndex(this.lines, (line:any) => line.id === lineAID);
         const lineBIndex = this.findIndex(this.lines, (line:any) => line.id === lineBID);
   
         const lineA:any = this.lines[lineAIndex];
         const lineB:any = this.lines[lineBIndex];
-  
+
         //let top =  lineA.top + 20
         const angleValue = lineA && lineB ? calculateAngle(lineA, lineB, angle.invert, angle.abs) : 'NA';
   
         const max = angle.mean + angle.deviation;
         const min = angle.mean - angle.deviation;
-      
-
+        var top  = this.pointsArray[this.pointAID].y
+        var left = this.pointsArray[this.pointAID].x
 			return {
 				id: angle.id,
         name : angle.name,
 				description: angle.description,
 				mean: angle.mean,
-        top: lineA.top,
-        left: lineB.left + 20,
+        top: lineB.top - lineA.top,
+        left: lineB.left - lineA.left,
 				deviation: angle.deviation,
 				value: angleValue,
 				interpretation:
@@ -215,16 +213,27 @@ export class CephLibComponent {
 			};
 		});
 	}
-
+  get distanceValues(){
+    return this.steinerDistance.map((distance) => {
+      
+    })
+  }
  
 
   addPoint(event: MouseEvent){
-    console.log(this.count)
+    console.clear();
+    if(this.options[this.count - 1] != undefined){
+      this.pointAID = this.options[this.count - 1].pointAlias
+    }
+    console.log(this.options[this.count])
     if(this.options[this.count] != undefined){
     this.options[this.count].isActive = false;
     this.pointName = this.options[this.count].pointName;
     this.pointNameAlias = this.options[this.count].pointAlias;
-    
+    this.count++;
+    console.log(this.options[this.count - 2])
+    console.log(this.pointAID)
+    console.log(this.options.length)
     if(this.count == this.options.length){
       console.log(true)
       this.allPointsCompleted = true 
@@ -232,8 +241,9 @@ export class CephLibComponent {
       console.log(this.options.length,this.count)
       console.log(false)
     }
-    if(this.options.length > this.count + 1){
-    this.previewImage = this.options[this.count + 1].imagePath;
+    
+    if(this.options.length > this.count){
+    this.previewImage = this.options[this.count].imagePath;
     }
       console.log(event.offsetX, event.offsetY)
       if(event.offsetX < 10 && event.offsetY < 10) {
@@ -249,10 +259,9 @@ export class CephLibComponent {
     }
    
     this.lineArr = this.lines;
-    console.log(this.lineArr)
     this.anglesArr = this.anglesValues;
-    this.count++;
   }
+    
     return true
   }
 
@@ -271,7 +280,7 @@ export class CephLibComponent {
           let id = element1.id.split('-');
           if(id[0] == this.options[index].pointAlias || id[1] == this.options[index].pointAlias){
               const index = this.lineArr.indexOf(element1);
-              console.log(index);
+            
               this.lineArr.splice(index,1);
           }
         }
@@ -289,7 +298,7 @@ export class CephLibComponent {
     const options:any = {
       steinerAnalysis : steinerPoints,
     }
-    console.log(event.target.value)
+    
     this.options = options[event.target.value]
   }
 
@@ -305,7 +314,7 @@ export class CephLibComponent {
     //this.instance.pan(100, 100);
     this.panZoomOptions.disablePan = false;
 
-    console.log(this.panZoomOptions)
+    
     return false;
 
   }
@@ -340,4 +349,12 @@ export class CephLibComponent {
   dontDrag(event:any){
     event.preventDefault()
   }
+
+   exportToJPEG(){
+    
+     converDivToJPEG(this.element, "CephalometricAnalysis")
+  }
+   exportToPDF(){
+    convertDivToPDF(this.element, "CephalometricAnalysis")
+   }
 }

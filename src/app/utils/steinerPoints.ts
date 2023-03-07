@@ -84,13 +84,13 @@ export const steinerPoints: Array<pointList> = [
     {
         pointName: 'Anterior Nasal Spine (ANS)',
         isActive: true,
-        pointAlias: 'AN',
+        pointAlias: 'ANS',
         imagePath: '',
     },
     {
         pointName: 'Posterior Nasal Spine (PNS)',
         isActive: true,
-        pointAlias: 'PN',
+        pointAlias: 'PNS',
         imagePath: '',
     },
     {
