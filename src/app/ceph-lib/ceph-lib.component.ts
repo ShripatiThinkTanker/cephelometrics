@@ -24,8 +24,8 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  steinerDistance = [distance['ANS-Me^'], distance['ANS-N^']]
-  strinerAngles = [angles['C1-C2^'],angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go']];
+  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb']]
+  strinerAngles = [angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -48,6 +48,9 @@ export class CephLibComponent {
   element:any;
   pointAID:any;
   pointBID:any;
+  ans_me_dist : number = 0;
+  ans_n_dist : number = 0;
+
   panZoomOptions = {disablePan:true}
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
@@ -111,7 +114,9 @@ export class CephLibComponent {
       this.strinerAngles.map((angle) => angle).reduce((arr: string[], angleID) => {
         angleID.id.split('^').forEach((x) => (arr.indexOf(x) === -1 ? arr.push(x) : ''));
         return arr;
-      }, [])).map((id) => {
+      }, []))
+      .concat(this.steinerDistance.length ? [ '0mm-10mm' ] : [])
+      .concat(this.steinerDistance.map((x) => x.id)).map((id) => {
         const pointAID = id.split('-')[0];
         const pointBID = id.split('-')[1];
         
@@ -131,10 +136,8 @@ export class CephLibComponent {
            if(this.pointAID == "C1" && this.pointBID == "C2"){
               this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
               this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
-          }
-          
-          
-          
+            }
+
           distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
           // console.log(distanceinmm * this.calibrationDist)
@@ -172,11 +175,6 @@ export class CephLibComponent {
     }
     return - 1;
   }
-  calculateDistance(x1:number,x2:number,y1:number,y2:number) {
-    let distanceinmm;
-          // distance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
-          distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
-  }
 
   get anglesValues() {
 		return this.strinerAngles.map((angle) => {
@@ -202,8 +200,6 @@ export class CephLibComponent {
         name : angle.name,
 				description: angle.description,
 				mean: angle.mean,
-        top: lineB.top - lineA.top,
-        left: lineB.left - lineA.left,
 				deviation: angle.deviation,
 				value: angleValue,
 				interpretation:
@@ -215,13 +211,74 @@ export class CephLibComponent {
 	}
   get distanceValues(){
     return this.steinerDistance.map((distance) => {
-      
+      const pointAID = distance.id.split('-')[0];
+      const pointBID = distance.id.split('-')[1];
+      const pointA = this.pointsArray[pointAID];
+      const pointB = this.pointsArray[pointBID];
+      var distanceValue;
+      if(pointA != undefined && pointB != undefined){
+        distanceValue = this.calculateDistance(pointA,pointB);
+      }
+			const max = distance.mean + distance.deviation;
+			const min = distance.mean - distance.deviation;
+      console.log(distanceValue)
+      if(distance.name == "LAFH"){
+        console.log("Nothing");
+        return {
+          id: "",
+          name : "",
+          description : "",
+          mean : 0,
+          deviation : 0,
+          value : 0,
+          interpretation  :""
+        }
+      }
+    return {
+      id: distance.id,
+      name : distance.name,
+      description: distance.description,
+      mean: distance.mean,
+      deviation: distance.deviation,
+      value: distanceValue,
+      interpretation:
+        distanceValue === undefined
+          ? ''
+          : distanceValue > max ? distance.inc : distanceValue < min ? distance.dec : distance.norm
+    };
     })
   }
- 
+  calculateDistance(pointA:any, pointB:any){
+    if(pointA !== undefined || pointB.x !== undefined){
+      let x1 = pointA.x;
+      let y1 = pointA.y;
+      let x2 = pointB.x;
+      let y2 = pointB.y;
+
+      if(pointA.point_name_alias == "C1" && pointB.point_name_alias == "C2"){
+        this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+        this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
+    }
+      if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "Me"){
+        this.ans_me_dist = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);// LAFH
+      }
+      if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "N"){
+        this.ans_n_dist = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);// UAFH
+      }
+      this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
+      var distanceinmm = 0;
+      if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "Me" || pointB.point_name_alias == "N"){  
+        distanceinmm =  this.ans_me_dist/this.ans_n_dist
+      }else{
+        distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
+      }
+      return distanceinmm
+    }
+  }
+
 
   addPoint(event: MouseEvent){
-    console.clear();
+    
     if(this.options[this.count - 1] != undefined){
       this.pointAID = this.options[this.count - 1].pointAlias
     }
@@ -245,6 +302,15 @@ export class CephLibComponent {
     if(this.options.length > this.count){
     this.previewImage = this.options[this.count].imagePath;
     }
+    if(this.pointNameAlias == "Pog"){
+      let pointBXCoord = this.pointsArray['B'].x
+      this.pointsArray['Arb'] = {
+        pointName : "",
+        x: pointBXCoord,
+        y : 620,
+        point_name_alias : ''
+      }
+    }
       console.log(event.offsetX, event.offsetY)
       if(event.offsetX < 10 && event.offsetY < 10) {
        console.log("condition true")
@@ -259,7 +325,7 @@ export class CephLibComponent {
     }
    
     this.lineArr = this.lines;
-    this.anglesArr = this.anglesValues;
+    this.anglesArr = this.anglesValues.concat(this.distanceValues);
   }
     
     return true

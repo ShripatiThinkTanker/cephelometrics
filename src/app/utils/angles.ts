@@ -13,16 +13,6 @@ export interface Angle {
 }
 
 export const angles : {[k: string] : Angle} = {
-	'C1-C2^': {
-		id: 'C1-C2^',
-		description: 'SNA angle, describes anteroposterior position of the maxilla in relation to the cranial base',
-		mean: 82,
-		deviation: 2,
-		inc: 'Prognathic maxilla',
-		dec: 'Retrognathic maxilla',
-		norm: 'Normal anteroposterior position of the maxilla',
-		typeOfMeasurement : "Linear",
-	},
 	//SNA
     'S-N^N-A': {
 		id: 'S-N^N-A',
@@ -161,6 +151,17 @@ export const angles : {[k: string] : Angle} = {
 		abs:true,
 		typeOfMeasurement : "Angular"
 	},
+
+	// 'ANS-Me^': {
+	// 	id: 'ANS-Me^',
+	// 	name : "LAFH",
+	// 	description: 'MMPA, maxillary-mandibular plane angle',
+	// 	mean: 27,
+	// 	deviation: 5,
+	// 	inc: 'Skeletal open bite, increases facial height',
+	// 	dec: 'Skeletal deep bite, decreases facial height',
+	// 	norm: 'Normal skeletal bite, normal facial height',
+	// },
 	
 	
 }
