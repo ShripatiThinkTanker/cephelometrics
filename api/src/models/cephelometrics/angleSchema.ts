@@ -8,6 +8,7 @@ const angleSchema = new mongoose.Schema({
   deviation: Number,
   value: String,
   interpretation: String,
+  typeOfMeasurement : String,
   name : String,
 });
 

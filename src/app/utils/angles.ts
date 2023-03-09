@@ -114,9 +114,9 @@ export const angles : {[k: string] : Angle} = {
 		mean: 66,
 		deviation: 4,
 		inc:
-			'Class II division 2 cases usually have a smaller Y-axis',
+			'Class II division 2',
 		dec:
-			'Class II division 1 cases usually have an average to high Y- axis.',
+			'Class II division 1',
 		norm: 'Normal mandible rotation',
 		invert : true,
 		typeOfMeasurement : "Angular"
@@ -151,6 +151,69 @@ export const angles : {[k: string] : Angle} = {
 		abs:true,
 		typeOfMeasurement : "Angular"
 	},
+	'S-N^U1-Arb1':{
+		id : 'S-N^U1-Arb1',
+		name: 'U1-SN',
+		description : "This angular measurement determines the inclination of the central incisor relative to the anterior cranial base",
+		mean : 103,
+		deviation : 6,
+		dec : "Class II division 2 cases",
+		inc : "Class II division 1 cases",
+		typeOfMeasurement : "Angular",
+		norm : "Normal Measurement",
+		invert : true,
+		abs : true
+	},
+	'N-A^U1-Arb1':{
+		id : 'N-A^U1-Arb1',
+		name : 'U1-NA',
+		description : "The relationship of the maxillary central incisor to the N-A reference line is used to establish the position of maxillary incisors relative to the maxillary apical base.",
+		mean : 22,
+		deviation : 6,
+		dec : "Class II division 2 ",
+		inc : "Class II division 1 ",
+		typeOfMeasurement : "Angular",
+		norm : "Normal Measurement",
+	},
+	"L1-Arb1^N-B": {
+		id : "L1-Arb1^N-B",
+		name : "L1-NB",
+		description : "The relationship of the mandibular central incisor to the N-B  reference line is used to establish the position of the mandibular incisors relative to the mandibular apical base.",
+		mean: 25,
+		deviation : 7,
+		dec : "Class II division 2 ",
+		inc : "Class II division 1 ",
+		typeOfMeasurement : "Angular",
+		norm : "Normal Measurement",
+		invert:false,
+		abs : true
+	},
+	"Me-Go^L1-Arb1":{
+		id : "Me-Go^L1-Arb1",
+		name : "L1-MP (IMPA)",
+		description : "Also known as IMPA (Incisor Mandibular Plane Angle). It defines the axial inclination between the mandibular incisor and the inferior border of the mandible",
+		mean : 90,
+		deviation : 5,
+		dec : "Class II division 2 ",
+		inc : "Class II division 1 ",
+		typeOfMeasurement : "Angular",
+		norm : "Normal Measurement",
+		invert:false,
+		abs : true
+	},
+	"U1-Arb1^L1-Arb1":{
+		id : "U1-Arb1^L1-Arb1",
+		name : "U1-L1",
+		description : "The interincisal angle measures the relative spatial position along the long axis of the most prominent (anteriorly positioned) maxillary and mandibular central incisors. It determines the degree of procumbency (labial inclination) of the incisors.",
+		mean : 135,
+		deviation : 11,
+		dec : "Class II division 2 ",
+		inc : "Class II division 1 ",
+		typeOfMeasurement : "Angular",
+		norm : "Normal Measurement",
+		invert:false,
+		abs : true
+	}
 
 	// 'ANS-Me^': {
 	// 	id: 'ANS-Me^',

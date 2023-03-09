@@ -70,7 +70,7 @@ export const convertDivToPDF = async(element:HTMLDivElement, docname:string) =>{
     downloadPDF(image,docname)
 }
 
- const downloadImage = (image:any,imageName:string) => {
+ export const downloadImage = (image:any,imageName:string) => {
     var fakeLink = window.document.createElement("a");
     fakeLink.style.display = "none;";
     fakeLink.download = imageName + ".jpeg";
@@ -84,8 +84,35 @@ export const convertDivToPDF = async(element:HTMLDivElement, docname:string) =>{
     fakeLink.remove();
 }
 
-const downloadPDF = (image:any, docName:string) => {
+export const downloadPDF = (image:any, docName:string) => {
     var pdf = new jsPDF('l','px',[1700,800]);
     pdf.addImage(image, 'PNG', 10,10,1700,800);
     pdf.save(docName+'.pdf');
 }
+
+export const calculateIntersection =  (p1 : any, p2 : any, p3 : any, p4 : any) => {
+    var c2x = p3.x - p4.x; // (x3 - x4)
+    var c3x = p1.x - p2.x; // (x1 - x2)
+    var c2y = p3.y - p4.y; // (y3 - y4)
+    var c3y = p1.y - p2.y; // (y1 - y2)
+
+    // down part of intersection point formula
+    var d  = c3x * c2y - c3y * c2x;
+
+    if (d == 0) {
+        throw new Error('Number of intersection points is zero or infinity.');
+    }
+
+    // upper part of intersection point formula
+    var u1 = p1.x * p2.y - p1.y * p2.x; // (x1 * y2 - y1 * x2)
+    var u4 = p3.x * p4.y - p3.y * p4.x; // (x3 * y4 - y3 * x4)
+
+    // intersection point formula
+
+    var px = (u1 * c2x - c3x * u4) / d;
+    var py = (u1 * c2y - c3y * u4) / d;
+
+    var p = { x: px, y: py };
+
+    return p;
+} 

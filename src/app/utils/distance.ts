@@ -22,6 +22,7 @@ export const distance: {[k:string] : Distance} = {
 		inc: 'Skeletal open bite, increases facial height',
 		dec: 'Skeletal deep bite, decreases facial height',
 		norm: 'Normal skeletal bite, normal facial height',
+		typeOfMeasurement : "Linear"
 	},
 	//UAFH
 	'ANS-N': {
@@ -33,6 +34,7 @@ export const distance: {[k:string] : Distance} = {
 		inc: 'Increased maxillary plane downward growth',
 		dec: 'Decreased maxillary plane downward growth',
 		norm: 'Normal maxillary plane growth',
+		typeOfMeasurement : "Linear",
 	},
 	'Pog-Arb':{
 		id : "Pog-Arb",
@@ -42,7 +44,19 @@ export const distance: {[k:string] : Distance} = {
 		deviation : 5,
 		inc : "",
 		dec : "",
-		norm : ""
+		norm : "",
+		typeOfMeasurement : "Linear",
+	},
+	'Arb1-Arb2':{
+		id : "Arb1-Arb2",
+		name : "U1-NA & L1-NB(Linear)",
+		description : "",
+		mean : 3,
+		deviation : 2,
+		inc : "",
+		dec : "",
+		norm : "",
+		typeOfMeasurement : "Linear"
 	},
 	'C1-C2': {
 		id: 'C1-C2',
@@ -54,4 +68,25 @@ export const distance: {[k:string] : Distance} = {
 		norm: 'Normal anteroposterior position of the maxilla',
 		typeOfMeasurement : "Linear",
 	},
+	'apOcP-ppOcP':{
+		id: 'apOcP-ppOcP',
+		description : "",
+		mean : 3,
+		deviation : 2,
+		inc : "",
+		dec : "",
+		norm : "",
+		typeOfMeasurement : "Linear"
+	},
+	'A!-B!' : {
+		id: 'A!-B!',
+		name : "A!-B!",
+		description : "",
+		mean : 1,
+		deviation : 2,
+		inc : "",
+		dec : "",
+		norm : "",
+		typeOfMeasurement : "Linear"
+	}
 }

@@ -20,26 +20,26 @@
   <img src = "{{imageURL}}" width = "899" height = "800" id = "image"/>
         <ng-container *ngFor="let points of pointsArray | keyvalue">
           <div draggable="true"
-            [ngStyle]="{'display':'block','position':'absolute', 'width':'7px', 'height':'7px','background-color':'red','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x   +'px','z-index':1}">
+            [ngStyle]="{'display':'block','position':'absolute', 'width':'7px', 'height':'7px','background-color':'white','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x   +'px','z-index':1}">
           </div>
-          <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'red','top': points.value.y  + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
+          <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'white','top': points.value.y  + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
 
         </ng-container> 
         <ng-container *ngFor="let line of lineArr">
           <ng-container *ngIf = "line.distanceinmm !== undefined">
             <ng-container *ngIf = "line.id == 'ANS-N' || line.id == 'ANS-Me'">
-              <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '15px', 'top': line.top! + 43 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
+              <span [ngStyle] = "{'position':'absolute', 'color' : 'black' ,'font-size': '15px', 'top': line.top! + 43 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
             </ng-container>
-            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(223, 11, 11)','border-color': 'rgb(223, 11, 11)','line-height': '1px','position': 'absolute','left': line.left + 3 +'px','top': line.top + 3+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
+            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(0, 0, 0)','border-color': 'rgb(0, 0, 0)','line-height': '1px','position': 'absolute','left': line.left + 3 +'px','top': line.top + 3+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
             <ng-container *ngIf = "line.id != 'C1-C2'">
             <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top + 3 +'px','width': line.x.x_distance + 3 +'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div>
             </ng-container>
           </ng-container>
         </ng-container>
 
-        <ng-container *ngFor = "let angle of anglesArr">
+        <!-- <ng-container *ngFor = "let angle of anglesArr">
           <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '15px', 'top': angle.top! +'px', 'left' : angle.left! + 'px'}">{{angle.value}}°</span>
-        </ng-container>
+        </ng-container> -->
       </div>
     </div>
     </div>
@@ -114,23 +114,32 @@
         </tr>
         <ng-container *ngFor="let results of anglesArr">
           <ng-container *ngIf = "results.name != ''">
-          <ng-container *ngIf = "results.id != 'C1-C2^'">
-            <ng-container *ngIf = "results.value <= results.mean else cond4">
-            <tr style = "background-color: green;">
-                <td color = "red">{{results.name}} </td>
-                <td color = "red"> {{results.mean}}° </td>
-                <td color = "red"> {{results.value}}° </td>
-                <td color = "red"> {{results.interpretation}} </td>
-
+          <ng-container *ngIf = "results.id != 'C1-C2'">
+            <ng-container *ngIf = "results.typeOfMeasurement == 'Angular' else cond5">
+            <tr>
+              <td>{{results.name}} </td>
+              <td> {{results.mean}}° </td>
+              <ng-container *ngIf = "results.value > results.mean else cond4">
+                <td> <span style="color:red">{{results.value}}° </span> </td>
+              </ng-container>
+              <ng-template #cond4>
+                <td> <span style = "color:green">{{results.value}}° </span> </td>
+                </ng-template>
+                <td> {{results.interpretation}} </td>
             </tr>
             </ng-container>
 
-            <ng-template #cond4>
-              <tr style = "background-color: red;">
-                  <td color = "green">{{results.name}} </td>
-                  <td color = "green"> {{results.mean}}° </td>
-                  <td color = "green"> {{results.value}}° </td>
-                  <td color = "green"> {{results.interpretation}} </td>
+            <ng-template #cond5>
+              <tr>
+                  <td>{{results.name}} </td>
+                  <td> {{results.mean}}mm </td>
+                  <ng-container *ngIf = "results.value > results.mean else cond6">
+                  <td> <span style="color:red">{{results.value}}mm</span> </td>
+                  </ng-container>
+                  <ng-template #cond6>
+                    <td> <span style = "color:green">{{results.value}}mm </span> </td>
+                  </ng-template>
+                  <td> {{results.interpretation}} </td>
                  
               </tr>
               </ng-template>

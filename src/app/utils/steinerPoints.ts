@@ -87,23 +87,35 @@ export const steinerPoints: Array<pointList> = [
         pointAlias: 'ANS',
         imagePath: '',
     },
+    // {
+    //     pointName: 'Posterior Nasal Spine (PNS)',
+    //     isActive: true,
+    //     pointAlias: 'PNS',
+    //     imagePath: '',
+    // },
+    // {
+    //     pointName: 'Basion (Ba)',
+    //     isActive: true,
+    //     pointAlias: 'BA',
+    //     imagePath: '',
+    // },
+    // {
+    //     pointName: 'Articulare (Ar)',
+    //     isActive: true,
+    //     pointAlias: 'Ar',
+    //     imagePath: '',
+    // },
     {
-        pointName: 'Posterior Nasal Spine (PNS)',
-        isActive: true,
-        pointAlias: 'PNS',
-        imagePath: '',
+        pointName : 'Upper Incisor',
+        isActive : true,
+        pointAlias : 'U1',
+        imagePath : ''
     },
     {
-        pointName: 'Basion (Ba)',
-        isActive: true,
-        pointAlias: 'BA',
-        imagePath: '',
-    },
-    {
-        pointName: 'Articulare (Ar)',
-        isActive: true,
-        pointAlias: 'Ar',
-        imagePath: '',
+        pointName : 'Lower Incisor',
+        isActive : true,
+        pointAlias : 'L1',
+        imagePath : ''
     },
     {
         pointName: 'Anterior Point of Occlusal Plane (apOcP)',
@@ -117,8 +129,8 @@ export const steinerPoints: Array<pointList> = [
         pointAlias: 'ppOcP',
         imagePath: '',
     },
-    { pointName: 'AO-point', isActive: true, pointAlias: 'AO', imagePath: '' },
-    { pointName: 'BO-point', isActive: true, pointAlias: 'BO', imagePath: '' },
+    // { pointName: 'AO-point', isActive: true, pointAlias: 'AO', imagePath: '' },
+    // { pointName: 'BO-point', isActive: true, pointAlias: 'BO', imagePath: '' },
 ]
 
 // export const basicPoints : Array<pointList> = [

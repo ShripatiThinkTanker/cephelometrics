@@ -3,7 +3,7 @@ import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
 import {pointList, steinerPoints } from '../utils/steinerPoints';
-import { calculateAngle, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
+import { calculateAngle, calculateIntersection, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
@@ -24,8 +24,23 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb']]
-  strinerAngles = [angles['S-N^N-A'], angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-Go']];
+  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['Arb1-Arb2'], distance['apOcP-ppOcP'], distance['A!-B!']]
+  strinerAngles = [
+    angles['S-N^N-A'],
+     angles['S-N^N-B'], 
+     angles['N-B^N-A'], 
+     angles['S-N^Me-Go'], 
+     angles['S-N^Pog-N'], 
+     angles['P-O^N-Pog'], 
+     angles['P-O^Me-Go'], 
+     angles['S-N^Gn-S'], 
+     angles['P-O^N-A'], 
+     angles['P-O^Gn-Go'], 
+     angles['S-N^U1-Arb1'],
+     angles['N-A^U1-Arb1'],
+     angles['L1-Arb1^N-B'],
+    angles['Me-Go^L1-Arb1'],
+    angles['U1-Arb1^L1-Arb1']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -201,6 +216,7 @@ export class CephLibComponent {
 				description: angle.description,
 				mean: angle.mean,
 				deviation: angle.deviation,
+        typeOfMeasurement : angle.typeOfMeasurement,
 				value: angleValue,
 				interpretation:
 					angleValue === 'NA' || angleValue === undefined
@@ -231,7 +247,7 @@ export class CephLibComponent {
           mean : 0,
           deviation : 0,
           value : 0,
-          interpretation  :""
+          interpretation  :"",typeOfMeasurement: ''
         }
       }
     return {
@@ -241,6 +257,7 @@ export class CephLibComponent {
       mean: distance.mean,
       deviation: distance.deviation,
       value: distanceValue,
+      typeOfMeasurement : distance.typeOfMeasurement,
       interpretation:
         distanceValue === undefined
           ? ''
@@ -268,7 +285,7 @@ export class CephLibComponent {
       this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
       var distanceinmm = 0;
       if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "Me" || pointB.point_name_alias == "N"){  
-        distanceinmm =  this.ans_me_dist/this.ans_n_dist
+        distanceinmm =  parseFloat((this.ans_n_dist/this.ans_me_dist).toPrecision(1))
       }else{
         distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
       }
@@ -282,6 +299,7 @@ export class CephLibComponent {
     if(this.options[this.count - 1] != undefined){
       this.pointAID = this.options[this.count - 1].pointAlias
     }
+    console.log(this.anglesArr)
     console.log(this.options[this.count])
     if(this.options[this.count] != undefined){
     this.options[this.count].isActive = false;
@@ -302,6 +320,7 @@ export class CephLibComponent {
     if(this.options.length > this.count){
     this.previewImage = this.options[this.count].imagePath;
     }
+
     if(this.pointNameAlias == "Pog"){
       let pointBXCoord = this.pointsArray['B'].x
       this.pointsArray['Arb'] = {
@@ -311,17 +330,68 @@ export class CephLibComponent {
         point_name_alias : ''
       }
     }
-      console.log(event.offsetX, event.offsetY)
-      if(event.offsetX < 10 && event.offsetY < 10) {
-       console.log("condition true")
-       return false
+
+    console.log(this.pointsArray)
+    if(this.pointNameAlias == "U1"){
+      this.pointsArray['Arb1'] = {
+        pointName : "",
+        x : event.offsetX + 30,
+        y : event.offsetY + 70,
+        point_name_alias : ''
       }
+
+      this.pointsArray['Arb2'] = {
+        pointName : "",
+        x : this.pointsArray['Arb1'].x + 20,
+        y : this.pointsArray['Arb1'].y,
+        point_name_alias : ''
+      }
+
+
+    }
+    console.log(event.offsetX, event.offsetY)
+    if(event.offsetX < 10 && event.offsetY < 10) {
+      console.log("condition true")
+      return false
+    }
     
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x: event.offsetX - 3,
       y:event.offsetY - 3,
       point_name_alias: this.pointNameAlias
+    }
+    console.log(this.pointsArray['apOcP'], this.pointsArray['ppOcP'])
+    if(this.pointsArray['N'] != undefined && this.pointsArray['B'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
+    console.log("inside the condition")
+    let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
+    let pointb : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
+    let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
+    let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
+
+    const newPoint = calculateIntersection(pointn,pointb,pointapOcP,pointppOcP);
+    this.pointsArray['B!'] = {
+      pointName : "B Compliment",
+      x: newPoint.x,
+      y : newPoint.y,
+      point_name_alias : "B!"
+    }
+    }
+    if(this.pointsArray['N'] != undefined && this.pointsArray['A'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
+      let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
+      let pointa : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
+      let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
+      let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
+
+      const newPoint = calculateIntersection(pointn,pointa,pointapOcP,pointppOcP);
+
+      this.pointsArray['A!'] = {
+        pointName : "A Compliment",
+        x : newPoint.x + 5,
+        y : newPoint.y + 5,
+        point_name_alias : "A!"
+      }
+
     }
    
     this.lineArr = this.lines;
@@ -335,7 +405,7 @@ export class CephLibComponent {
      this.options[index].isActive = true;
      this.allPointsCompleted = false 
      let newPoints = Object.keys(this.pointsArray)
-
+    
      
       newPoints.forEach((element) => {
         this.lineArr.forEach((element1:any) => {  
@@ -346,7 +416,7 @@ export class CephLibComponent {
           let id = element1.id.split('-');
           if(id[0] == this.options[index].pointAlias || id[1] == this.options[index].pointAlias){
               const index = this.lineArr.indexOf(element1);
-            
+
               this.lineArr.splice(index,1);
           }
         }
