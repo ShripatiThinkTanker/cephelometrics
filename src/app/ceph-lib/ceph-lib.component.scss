@@ -68,11 +68,14 @@
   }
   .right-menu {
     position: relative;
-    grid-column: 1 / 9;
-    grid-row: 2 / 4;
+    grid-column: 1/9;
+    max-height: 877px;
+    grid-row: 2/4;
     grid-template-columns: repeat(3, 1fr);
     overflow: scroll;
-    background: rgb(236 236 236);
+    background: rgb(236, 236, 236);
+    bottom: 51px;
+    left:20px;
     z-index: 100;
   }
   .right-menu > li {
@@ -95,9 +98,11 @@
     grid-column: 1/9;
     grid-row: 4/4;
     align-items: center;
-    width: 27%;
-    overflow: scroll;
+    width: 88%;
+    /* overflow: scroll; */
     z-index: 100;
+    bottom: 68px;
+    margin-left: 369px;
   }
   .result-table {
     color: black;
@@ -130,7 +135,7 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: subgrid;
     z-index: 100;
-    top: 50px;
+    top: 17px;
   }
   .image {
     width: 276px;

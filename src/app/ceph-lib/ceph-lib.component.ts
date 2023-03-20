@@ -19,28 +19,17 @@ export class CephLibComponent {
   imageURL: string | null = "";
   
   instance : any;
+  showImageSettingsPanel = false;
+  contrastSetting:number = 100;
+  brightnessSetting:number = 100
+  invertSetting:number = 0;
   count:number = 0;
   pointName:string = "";
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['Arb1-Arb2'], distance['apOcP-ppOcP'], distance['A!-B!']]
-  strinerAngles = [
-    angles['S-N^N-A'],
-     angles['S-N^N-B'], 
-     angles['N-B^N-A'], 
-     angles['S-N^Me-Go'], 
-     angles['S-N^Pog-N'], 
-     angles['P-O^N-Pog'], 
-     angles['P-O^Me-Go'], 
-     angles['S-N^Gn-S'], 
-     angles['P-O^N-A'], 
-     angles['P-O^Gn-Go'], 
-     angles['S-N^U1-Arb1'],
-     angles['N-A^U1-Arb1'],
-     angles['L1-Arb1^N-B'],
-    angles['Me-Go^L1-Arb1'],
-    angles['U1-Arb1^L1-Arb1']];
+  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['apOcP-ppOcP'], distance['A!-B!']]
+  strinerAngles = [angles['S-N^N-A'],angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-S'], angles['S-N^UIe-UIa'],angles['UIe-UIa^N-A'],angles['LIe-LIa^N-B'],angles['Me-Go^LIe-LIa'],angles['UIe-UIa^LIe-LIa']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -59,22 +48,23 @@ export class CephLibComponent {
   tempanglesArr : Array<any> = [];
   allPointsCompleted:boolean = false
   magnifier:any;
-  div:any;
+  div:any
   element:any;
   pointAID:any;
   pointBID:any;
   ans_me_dist : number = 0;
   ans_n_dist : number = 0;
-
+  tempCount:number = 0;
+  isPointRemoved:boolean = false;
   panZoomOptions = {disablePan:true}
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
   })
 
-  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder, public toasterService: ToastrService){
+  constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder, public toasterService: ToastrService ){
 
   }
-
+  // This function loads up when the component is initialized.
   ngOnInit(){
     
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
@@ -123,7 +113,7 @@ export class CephLibComponent {
     })
     
   }
-
+  // This Getter derives the line to be drawn between two points based on the relationship defined in the angle.ts and distance.ts file
   get lines() {
     return (
       this.strinerAngles.map((angle) => angle).reduce((arr: string[], angleID) => {
@@ -157,15 +147,20 @@ export class CephLibComponent {
           distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
           // console.log(distanceinmm * this.calibrationDist)
           left = Math.floor((x1 + x2) / 2 - distance / 2);
-          top = Math.floor((y1 + y2) / 2 - 1 / 2);
-          angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
-          x_left = Math.floor((x1 + x2) / 2 - 3000 / 2);
-          x_top = Math.floor((y1 + y2) / 2 - 1 / 2);
-          x_angle = Math.floor(Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI));
+          top = Math.floor((y1 + y2) / 2 - distance / 2);
+          angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
+
+          if(id == "Me-Go" || id == "Gn-S" || id == "Pog-Arb"){
+            x_left = Math.floor((x1 + x2) / 2 - 3000 / 2)  + 3
+            x_top = Math.floor((y1 + y2) / 2 - 1 / 2) + 2;
+          }
+          else{
+            x_left = Math.floor((x1 + x2) / 2 - 3000 / 2)  + 3;
+            x_top = Math.floor((y1 + y2) / 2 - 1 / 2)  + 4;
+          }
+          x_angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
           
         }
-
-       
       return {
         distance,
         distanceinmm,
@@ -190,7 +185,8 @@ export class CephLibComponent {
     }
     return - 1;
   }
-
+  // A getter to get the angle values
+  // This Getter has been used to derive values out of the Constant list in the angles.ts file
   get anglesValues() {
 		return this.strinerAngles.map((angle) => {
       var lineAID:string,lineBID:string;
@@ -225,6 +221,8 @@ export class CephLibComponent {
 			};
 		});
 	}
+
+  // Another getter which dreives the distance between two points
   get distanceValues(){
     return this.steinerDistance.map((distance) => {
       const pointAID = distance.id.split('-')[0];
@@ -271,29 +269,38 @@ export class CephLibComponent {
       let y1 = pointA.y;
       let x2 = pointB.x;
       let y2 = pointB.y;
-
+      // Need to handle specific cases as these cases are not handled by the user but the system itself
       if(pointA.point_name_alias == "C1" && pointB.point_name_alias == "C2"){
         this.calibrationdistance = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
         this.calibrationdistanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333));
     }
+    // this block is used to derive the UAFH and LAFH Ratio. 
+
+    // Calculate LAFH
       if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "Me"){
         this.ans_me_dist = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);// LAFH
       }
+    // Calculate UAFH
       if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "N"){
         this.ans_n_dist = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);// UAFH
       }
+      // This is to calculate the Magnification factor. 
       this.calibrationDist = parseInt(this.magnifier)/this.calibrationdistanceinmm 
       var distanceinmm = 0;
+
+      // Get the ratio
       if(pointA.point_name_alias == "ANS" && pointB.point_name_alias == "Me" || pointB.point_name_alias == "N"){  
         distanceinmm =  parseFloat((this.ans_n_dist/this.ans_me_dist).toPrecision(1))
-      }else{
+      }
+      // end of block
+      
+      else{
+        // Calculate the distance as it is. 
         distanceinmm = Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * (0.2645833333) * this.calibrationDist);
       }
       return distanceinmm
     }
   }
-
-
   addPoint(event: MouseEvent){
     
     if(this.options[this.count - 1] != undefined){
@@ -320,35 +327,7 @@ export class CephLibComponent {
     if(this.options.length > this.count){
     this.previewImage = this.options[this.count].imagePath;
     }
-
-    if(this.pointNameAlias == "Pog"){
-      let pointBXCoord = this.pointsArray['B'].x
-      this.pointsArray['Arb'] = {
-        pointName : "",
-        x: pointBXCoord,
-        y : 620,
-        point_name_alias : ''
-      }
-    }
-
-    console.log(this.pointsArray)
-    if(this.pointNameAlias == "U1"){
-      this.pointsArray['Arb1'] = {
-        pointName : "",
-        x : event.offsetX + 30,
-        y : event.offsetY + 70,
-        point_name_alias : ''
-      }
-
-      this.pointsArray['Arb2'] = {
-        pointName : "",
-        x : this.pointsArray['Arb1'].x + 20,
-        y : this.pointsArray['Arb1'].y,
-        point_name_alias : ''
-      }
-
-
-    }
+  
     console.log(event.offsetX, event.offsetY)
     if(event.offsetX < 10 && event.offsetY < 10) {
       console.log("condition true")
@@ -358,60 +337,79 @@ export class CephLibComponent {
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x: event.offsetX - 3,
-      y:event.offsetY - 3,
+      y: event.offsetY - 3,
       point_name_alias: this.pointNameAlias
     }
-    console.log(this.pointsArray['apOcP'], this.pointsArray['ppOcP'])
-    if(this.pointsArray['N'] != undefined && this.pointsArray['B'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
-    console.log("inside the condition")
-    let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
-    let pointb : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
-    let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
-    let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
-
-    const newPoint = calculateIntersection(pointn,pointb,pointapOcP,pointppOcP);
-    this.pointsArray['B!'] = {
-      pointName : "B Compliment",
-      x: newPoint.x,
-      y : newPoint.y,
-      point_name_alias : "B!"
-    }
-    }
-    if(this.pointsArray['N'] != undefined && this.pointsArray['A'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
-      let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
-      let pointa : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
-      let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
-      let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
-
-      const newPoint = calculateIntersection(pointn,pointa,pointapOcP,pointppOcP);
-
-      this.pointsArray['A!'] = {
-        pointName : "A Compliment",
-        x : newPoint.x + 5,
-        y : newPoint.y + 5,
-        point_name_alias : "A!"
-      }
-
-    }
-   
+    // check Specific Cases
+    this.checkSpecificCases(event);
     this.lineArr = this.lines;
     this.anglesArr = this.anglesValues.concat(this.distanceValues);
   }
     
     return true
   }
+  checkSpecificCases(event:any){
+  // Checking for specific points and creating Arbitrary points
+  if(this.pointNameAlias == "Pog"){
+    let pointBXCoord = this.pointsArray['B'].x
+    let pointBYCoord = this.pointsArray['B'].y
+    this.pointsArray['Arb'] = {
+      pointName : "",
+      x: pointBXCoord - 2,
+      y : pointBYCoord + 35,
+      point_name_alias : ''
+    }
+  }
 
+  console.log(this.pointsArray)
+   // Checking for the intersection of the points. 
+    // This is for the measurement of Wit's Appraisal
+    // Initialize the intersection only if the blow listed points in the condition exist
+    if(this.pointsArray['N'] != undefined && this.pointsArray['B'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
+      let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
+      let pointb : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
+      let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
+      let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
+  
+      const newPoint = calculateIntersection(pointn,pointb,pointapOcP,pointppOcP);
+      this.pointsArray['B!'] = {
+        pointName : "B Compliment",
+        x: newPoint.x,
+        y : newPoint.y,
+        point_name_alias : "B!"
+      }
+      }
+      // End of B! 
+  
+      if(this.pointsArray['N'] != undefined && this.pointsArray['A'] != undefined && this.pointsArray['apOcP'] != undefined && this.pointsArray['ppOcP'] != undefined){
+        let pointn : any = {"x" : this.pointsArray['N'].x, "y" : this.pointsArray['N'].y}
+        let pointa : any = {"x" : this.pointsArray['B'].x, "y" : this.pointsArray['B'].y}
+        let pointapOcP : any = {"x" : this.pointsArray['apOcP'].x, "y": this.pointsArray['apOcP'].y}
+        let pointppOcP : any = {"x" : this.pointsArray['ppOcP'].x, "y" : this.pointsArray['ppOcP'].y}
+  
+        const newPoint = calculateIntersection(pointn,pointa,pointapOcP,pointppOcP);
+  
+        this.pointsArray['A!'] = {
+          pointName : "A Compliment",
+          x : newPoint.x + 5,
+          y : newPoint.y + 5,
+          point_name_alias : "A!"
+        }
+  
+      }
+  } 
   removePoint(index:number){
+    this.isPointRemoved = true
+    this.tempCount = this.count;
      this.options[index].isActive = true;
      this.allPointsCompleted = false 
      let newPoints = Object.keys(this.pointsArray)
-    
-     
       newPoints.forEach((element) => {
         this.lineArr.forEach((element1:any) => {  
           if(this.pointsArray[element] != undefined){ 
           if(this.pointsArray[element].point_name_alias == this.options[index].pointAlias){
             delete this.pointsArray[element]
+            this.count = index
           }
           let id = element1.id.split('-');
           if(id[0] == this.options[index].pointAlias || id[1] == this.options[index].pointAlias){
@@ -420,43 +418,30 @@ export class CephLibComponent {
               this.lineArr.splice(index,1);
           }
         }
-
         });
       })
-     this.count--;
+      this.count--;
   }
-
   zoomIn() {
       this.instance.zoomIn();
   }
-
   analysisChange(event:any){
     const options:any = {
       steinerAnalysis : steinerPoints,
     }
-    
     this.options = options[event.target.value]
   }
-
   zoomOut() {
       this.instance.zoomOut();
   }
-
   reset() {
     this.instance.reset();
   }  
-
   disableContextMenu(){
-    //this.instance.pan(100, 100);
     this.panZoomOptions.disablePan = false;
-
-    
     return false;
-
   }
-
   submitPayload(){
-   
     this.payload = {
       "ceph_id" : atob(this.activatedRouter.snapshot.params['id']),
       "points" : this.pointsArray,
@@ -479,18 +464,41 @@ export class CephLibComponent {
       this.router.navigate(["cephelometrics"])
     }
   }
-  prevent(event:MouseEvent) {
-    event.preventDefault()
-  }
-  dontDrag(event:any){
-    event.preventDefault()
-  }
-
    exportToJPEG(){
-    
      converDivToJPEG(this.element, "CephalometricAnalysis")
   }
    exportToPDF(){
     convertDivToPDF(this.element, "CephalometricAnalysis")
+   }
+
+   showImageSettings(){
+    this.showImageSettingsPanel = true
+   }
+   changeImageSettings(settingType : string, event:any){
+    if(settingType == "Contrast"){
+      this.contrastSetting = event.target.value
+    }
+    if(settingType == "Brightness"){
+      this.brightnessSetting = event.target.value
+    }
+    if(settingType == "Invert"){
+      this.invertSetting = event.target.value
+    }
+
+   }
+   resetAllPoints(){
+    this.lineArr = [];
+    this.pointsArray = {};
+    this.options.forEach(element => {
+      element.isActive = true
+    })
+    this.count = 0
+    this.allPointsCompleted = false
+    this.anglesArr = []
+   }
+   resetAllSettings(){
+    this.brightnessSetting = 100;
+    this.contrastSetting = 100;
+    this.invertSetting = 0
    }
 }

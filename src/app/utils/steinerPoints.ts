@@ -106,17 +106,32 @@ export const steinerPoints: Array<pointList> = [
     //     imagePath: '',
     // },
     {
-        pointName : 'Upper Incisor',
+        pointName : 'Upper Incisor edge',
         isActive : true,
-        pointAlias : 'U1',
+        pointAlias : 'UIe',
         imagePath : ''
     },
     {
-        pointName : 'Lower Incisor',
+        pointName : 'Upper Incisor apex',
         isActive : true,
-        pointAlias : 'L1',
+        pointAlias : 'UIa',
         imagePath : ''
     },
+
+    {
+        pointName : 'Lower Incisor edge',
+        isActive : true,
+        pointAlias : 'LIe',
+        imagePath : ''
+    },
+    
+    {
+        pointName : 'Lower Incisor apex',
+        isActive : true,
+        pointAlias : 'LIa',
+        imagePath : ''
+    },
+
     {
         pointName: 'Anterior Point of Occlusal Plane (apOcP)',
         isActive: true,

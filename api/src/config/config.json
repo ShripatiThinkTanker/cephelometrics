@@ -1,6 +1,6 @@
 {
   "mongooseUrl": {
-    "serverUrl": "mongodb+srv://shripatithinktanker:uHVIwxh8vqopAIXe@cluster0.ful0mlg.mongodb.net",
+    "serverUrl": "mongodb+srv://shripati:hoSEDJk5LhJMFYgS@cephelometrics.ep8yigr.mongodb.net/?retryWrites=true&w=majority",
     "db": "cephelometrics"
   }
 }

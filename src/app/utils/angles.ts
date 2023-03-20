@@ -122,8 +122,8 @@ export const angles : {[k: string] : Angle} = {
 		typeOfMeasurement : "Angular"
 	},
 	// Y-Axis FH
-	"P-O^Gn-Go":{
-		id : 'P-O^Gn-Go',
+	"P-O^Gn-S":{
+		id : 'P-O^Gn-S',
 		name : "Y-Axis FH",
 		description : "The same interpretation as above using Sella-Nasion. Many orthodontists prefer to use Frankfort Horizontal than SN.",
 		mean : 59,
@@ -151,8 +151,8 @@ export const angles : {[k: string] : Angle} = {
 		abs:true,
 		typeOfMeasurement : "Angular"
 	},
-	'S-N^U1-Arb1':{
-		id : 'S-N^U1-Arb1',
+	'S-N^UIe-UIa':{
+		id : 'S-N^UIe-UIa',
 		name: 'U1-SN',
 		description : "This angular measurement determines the inclination of the central incisor relative to the anterior cranial base",
 		mean : 103,
@@ -164,8 +164,8 @@ export const angles : {[k: string] : Angle} = {
 		invert : true,
 		abs : true
 	},
-	'N-A^U1-Arb1':{
-		id : 'N-A^U1-Arb1',
+	'UIe-UIa^N-A':{
+		id : 'UIe-UIa^N-A',
 		name : 'U1-NA',
 		description : "The relationship of the maxillary central incisor to the N-A reference line is used to establish the position of maxillary incisors relative to the maxillary apical base.",
 		mean : 22,
@@ -174,9 +174,11 @@ export const angles : {[k: string] : Angle} = {
 		inc : "Class II division 1 ",
 		typeOfMeasurement : "Angular",
 		norm : "Normal Measurement",
+		invert:true,
+		abs:true
 	},
-	"L1-Arb1^N-B": {
-		id : "L1-Arb1^N-B",
+	"LIe-LIa^N-B": {
+		id : "LIe-LIa^N-B",
 		name : "L1-NB",
 		description : "The relationship of the mandibular central incisor to the N-B  reference line is used to establish the position of the mandibular incisors relative to the mandibular apical base.",
 		mean: 25,
@@ -188,8 +190,8 @@ export const angles : {[k: string] : Angle} = {
 		invert:false,
 		abs : true
 	},
-	"Me-Go^L1-Arb1":{
-		id : "Me-Go^L1-Arb1",
+	"Me-Go^LIe-LIa":{
+		id : "Me-Go^LIe-LIa",
 		name : "L1-MP (IMPA)",
 		description : "Also known as IMPA (Incisor Mandibular Plane Angle). It defines the axial inclination between the mandibular incisor and the inferior border of the mandible",
 		mean : 90,
@@ -201,8 +203,8 @@ export const angles : {[k: string] : Angle} = {
 		invert:false,
 		abs : true
 	},
-	"U1-Arb1^L1-Arb1":{
-		id : "U1-Arb1^L1-Arb1",
+	"UIe-UIa^LIe-LIa":{
+		id : "UIe-UIa^LIe-LIa",
 		name : "U1-L1",
 		description : "The interincisal angle measures the relative spatial position along the long axis of the most prominent (anteriorly positioned) maxillary and mandibular central incisors. It determines the degree of procumbency (labial inclination) of the incisors.",
 		mean : 135,
@@ -212,7 +214,7 @@ export const angles : {[k: string] : Angle} = {
 		typeOfMeasurement : "Angular",
 		norm : "Normal Measurement",
 		invert:false,
-		abs : true
+		abs : false
 	}
 
 	// 'ANS-Me^': {

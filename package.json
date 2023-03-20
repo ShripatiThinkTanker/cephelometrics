@@ -34,6 +34,7 @@
     "ngx-panzoom": "^15.0.0",
     "ngx-toastr": "^16.0.2",
     "panzoom": "^9.4.3",
+    "primeng": "^15.2.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

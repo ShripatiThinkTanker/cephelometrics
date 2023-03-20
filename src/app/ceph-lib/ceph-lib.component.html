@@ -10,33 +10,36 @@
   <div class = "containmentDiv">
   <div class="stack-canvas" id="divBG" [ngStyle]="{'width': '899px',
     'height': '750px',
-    'position' : 'fixed',
+    'position' : 'absolute',
     'cursor' : 'crosshair',
     'border': '2px solid ',
     'margin-left': '46%',
-    'margin-top': '20px'
+    'margin-top': '86px'
   }">
-  <div class="overlay" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)" (drag) = "dontDrag($event)" [ngStyle]=  "{'cursor':'crosshair'}" id = "image-container">
-  <img src = "{{imageURL}}" width = "899" height = "800" id = "image"/>
+  <div class="overlay" (contextmenu) = "disableContextMenu()" (click) = "addPoint($event)" [ngStyle]=  "{'cursor':'crosshair'}" id = "image-container">
+  <img src = "{{imageURL}}" width = "899" height = "800" id = "image" [ngStyle] = "{'filter' : 'contrast('+contrastSetting+'%) brightness('+brightnessSetting+'%) invert('+invertSetting+'%)'}"/>
         <ng-container *ngFor="let points of pointsArray | keyvalue">
           <div draggable="true"
-            [ngStyle]="{'display':'block','position':'absolute', 'width':'7px', 'height':'7px','background-color':'white','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x   +'px','z-index':1}">
+            [ngStyle]="{'display':'block','position':'absolute', 'width':'7px', 'height':'7px','background-color':'white','border-radius':'30px','top': points.value.y +'px', 'left': points.value.x +'px','z-index':1}">
           </div>
-          <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'white','top': points.value.y  + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
+          <span [ngStyle]="{'display':'block','position':'absolute', 'font-size' : '20px','color': 'white','top': points.value.y + 10  +'px', 'left': points.value.x + 10 +'px','z-index':1}">{{points.value.point_name_alias}}</span>
 
         </ng-container> 
+        <svg height="800" width="899" style = "position:relative">
         <ng-container *ngFor="let line of lineArr">
-          <ng-container *ngIf = "line.distanceinmm !== undefined">
-            <ng-container *ngIf = "line.id == 'ANS-N' || line.id == 'ANS-Me'">
-              <span [ngStyle] = "{'position':'absolute', 'color' : 'black' ,'font-size': '15px', 'top': line.top! + 43 +'px', 'left' : line.left! + 40 + 'px'}">{{line.distanceinmm}}mm</span>
-            </ng-container>
-            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','background-color': 'rgb(0, 0, 0)','border-color': 'rgb(0, 0, 0)','line-height': '1px','position': 'absolute','left': line.left + 3 +'px','top': line.top + 3+'px','width': line.distance+'px','transform': 'rotate('+line.angle+'deg)'}"></div>
-            <ng-container *ngIf = "line.id != 'C1-C2'">
-            <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left+'px','top': line.x.x_top + 3 +'px','width': line.x.x_distance + 3 +'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div>
-            </ng-container>
+          <ng-container *ngIf = "line.id == 'C1-C2'">
+            <line [attr.x1]="line.x1 + 3" [attr.y1]="line.y1 + 3" [attr.x2]="line.x2 + 3" [attr.y2]="line.y2 + 3" style="stroke:rgb(254, 254, 254);stroke-width:2" />
           </ng-container>
         </ng-container>
-
+        </svg> 
+        <ng-container *ngFor="let line of lineArr">
+        <ng-container *ngIf = "line.id != 'C1-C2'">
+          <ng-container *ngIf = "line.id == 'ANS-N' || line.id == 'ANS-Me'">
+            <span [ngStyle] = "{'position':'relative', 'color' : 'black' ,'font-size': '15px', 'top': line.top +'px', 'left' : line.left + 'px'}">{{line.distanceinmm}}mm</span>
+          </ng-container>
+          <div [ngStyle] = "{'display':'block','padding': '0px','margin': '0px','height': '2px','border-bottom':'1px dashed rgb(227, 227, 227)','line-height': '1px','position': 'absolute','left': line.x.x_left +'px','top': line.x.x_top +'px','width': line.x.x_distance +'px','transform': 'rotate('+line.x.x_angle+'deg)'}"></div>
+          </ng-container>
+        </ng-container>
         <!-- <ng-container *ngFor = "let angle of anglesArr">
           <span [ngStyle] = "{'position':'absolute', 'color' : 'red' ,'font-size': '15px', 'top': angle.top! +'px', 'left' : angle.left! + 'px'}">{{angle.value}}°</span>
         </ng-container> -->
@@ -56,13 +59,24 @@
           <button class = "btn btn-outline-primary" (click) = "goBackToMainPage()"><mat-icon>cancel</mat-icon> Cancel </button>
           <button class = "btn btn-outline-success" (click) = "exportToJPEG()"><mat-icon>import_export</mat-icon> Export as JPEG </button>
           <button class = "btn btn-outline-success" (click) = "exportToPDF()"><mat-icon>import_export</mat-icon> Export as PDF </button>
+          <button class = "btn btn-outline-success" (click) = "showImageSettings()"> <mat-icon>settings</mat-icon> Image settings </button>
+          <button class = "btn btn-outline-primary" (click) = "resetAllPoints()"> <mat-icon> loop </mat-icon> Reset </button>
         </div>
         
         <ng-container *ngIf="previewImage">
           <img src="{{previewImage}}" style="position:relative; z-index:100" width=272 height=304>
         </ng-container>
       </div>
+      <p-dialog header="Image Settings" [(visible)]="showImageSettingsPanel" [modal]="false" 
+      [draggable]="true" [resizable]="true" >
     
+        Adjust Contrast <input type = "range" name = "contrastSlider" max="200" min="0" (change) = "changeImageSettings('Contrast',$event)"/>
+        Adjust Brightness <input type="range" name = "brightnessSlider" max = "200" min = "0" (change) = "changeImageSettings('Brightness',$event)"/>
+        Adjust Invert <input type = "range" name = "invertSlider" max = "100" min = "0" (change) = "changeImageSettings('Invert', $event)"/>
+
+
+        <input type = "button" class = "btn btn-outline-primary" (click) = "resetAllSettings()" value = "Reset"/> 
+      </p-dialog>
       <div class="pointsDiv">
         <select class="selectOptions" style="position: relative;" (change) = "analysisChange($event)">
           <option selected value="steinerAnalysis"> Steiner Analysis </option>
@@ -77,9 +91,14 @@
   top: 0;
   width: 100%;
 ">
-    <h4> Points </h4> <span style = "margin-left: 158px"> All Points marked  <ng-container *ngIf = "allPointsCompleted else cond5"><b>Yes</b> </ng-container> <ng-template #cond5> <b>No</b> </ng-template></span>
+    <h4 style = "position: relative;
+    font-weight: bold;
+    color: #000000;
+    top: 45px;
+    left: 20px;"> Points </h4> <span style = "margin-left: 158px"> All Points marked  <ng-container *ngIf = "allPointsCompleted else cond5"><b><mat-icon>check_circle_outline</mat-icon></b> </ng-container> <ng-template #cond5> <b><mat-icon>highlight_off</mat-icon></b> </ng-template></span>
     </div>
-    <table class = "menu-title" style = "margin-top: 50px;">
+    <table class = "menu-title" style = "margin-top: 50px; border-collapse: separate;
+    border-spacing: 0 15px;">
 
       <tr *ngFor="let option of options let i = index">
           <ng-container *ngIf="option.isActive else cond2">
@@ -94,7 +113,7 @@
                   }} </a> </td>
                   <td> </td>
                   <td> </td>
-                  <td><mat-icon (click)="removePoint(i)" style="font-size: 18px;float: right;"> delete </mat-icon></td>
+                  <td><mat-icon (click)="removePoint(i)" style="font-size: 18px;float: right;">loop</mat-icon></td>
                   
                   </ng-template>
         </tr>
