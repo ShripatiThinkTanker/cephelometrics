@@ -57,8 +57,15 @@ export class CephLibComponent {
   tempCount:number = 0;
   isPointRemoved:boolean = false;
   panZoomOptions = {disablePan:true}
+  index:number = 0
   calibrationMagnification = this.fb.group({
     magnificationFactor : ['',Validators.required]
+  })
+
+  imageSettings = this.fb.group({
+    contrastSlider : [0],
+    brightnessSlider : [0],
+    invertSlider : [0]
   })
 
   constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder, public toasterService: ToastrService ){
@@ -176,7 +183,12 @@ export class CephLibComponent {
       };
       })
   }
-
+  selectedIndex(index:number){
+      this.index = index
+      if(this.options[this.index + 1] != undefined){
+        this.previewImage = this.options[this.index + 1].imagePath;
+      }
+  }
   findIndex(array:any, callback:(point:any) => boolean){
     for(let index = 0; index < array.length; index++){
       if(callback(array[index])){
@@ -301,39 +313,22 @@ export class CephLibComponent {
       return distanceinmm
     }
   }
+  //This is the Old implementation where the point was added only when the xray div was clicked 
   addPoint(event: MouseEvent){
-    
-    if(this.options[this.count - 1] != undefined){
-      this.pointAID = this.options[this.count - 1].pointAlias
-    }
-    console.log(this.anglesArr)
-    console.log(this.options[this.count])
-    if(this.options[this.count] != undefined){
-    this.options[this.count].isActive = false;
-    this.pointName = this.options[this.count].pointName;
-    this.pointNameAlias = this.options[this.count].pointAlias;
+    this.pointAID = this.options[this.index].pointAlias
+    this.options[this.index].isActive = false;
+    this.pointName = this.options[this.index].pointName;
+    this.pointNameAlias = this.options[this.index].pointAlias;
     this.count++;
-    console.log(this.options[this.count - 2])
-    console.log(this.pointAID)
-    console.log(this.options.length)
-    if(this.count == this.options.length){
+    console.log(this.count)
+    if(this.index == this.options.length){
       console.log(true)
       this.allPointsCompleted = true 
-    }else{
-      console.log(this.options.length,this.count)
-      console.log(false)
     }
-    
-    if(this.options.length > this.count){
-    this.previewImage = this.options[this.count].imagePath;
-    }
-  
+   
     console.log(event.offsetX, event.offsetY)
-    if(event.offsetX < 10 && event.offsetY < 10) {
-      console.log("condition true")
-      return false
-    }
     
+
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
       x: event.offsetX - 3,
@@ -344,7 +339,7 @@ export class CephLibComponent {
     this.checkSpecificCases(event);
     this.lineArr = this.lines;
     this.anglesArr = this.anglesValues.concat(this.distanceValues);
-  }
+    console.log(this.anglesArr)
     
     return true
   }
@@ -400,7 +395,7 @@ export class CephLibComponent {
   } 
   removePoint(index:number){
     this.isPointRemoved = true
-    this.tempCount = this.count;
+    //this.tempCount = this.count;
      this.options[index].isActive = true;
      this.allPointsCompleted = false 
      let newPoints = Object.keys(this.pointsArray)
@@ -409,7 +404,7 @@ export class CephLibComponent {
           if(this.pointsArray[element] != undefined){ 
           if(this.pointsArray[element].point_name_alias == this.options[index].pointAlias){
             delete this.pointsArray[element]
-            this.count = index
+            // this.count = index
           }
           let id = element1.id.split('-');
           if(id[0] == this.options[index].pointAlias || id[1] == this.options[index].pointAlias){
@@ -500,5 +495,6 @@ export class CephLibComponent {
     this.brightnessSetting = 100;
     this.contrastSetting = 100;
     this.invertSetting = 0
+    this.imageSettings.patchValue({brightnessSlider : this.brightnessSetting, contrastSlider:this.contrastSetting, invertSlider : this.invertSetting})
    }
 }
