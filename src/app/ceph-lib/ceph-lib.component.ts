@@ -3,7 +3,7 @@ import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
 import {pointList, steinerPoints } from '../utils/steinerPoints';
-import { calculateAngle, calculateIntersection, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
+import { calculateAngle, calculateIntersection, calculatePointToLine, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
@@ -28,7 +28,7 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['apOcP-ppOcP'], distance['A!-B!']]
+  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['apOcP-ppOcP'], distance['A!-B!'], distance['UIe-Arb'], distance['LIe-Arb']]
   strinerAngles = [angles['S-N^N-A'],angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-S'], angles['S-N^UIe-UIa'],angles['UIe-UIa^N-A'],angles['LIe-LIa^N-B'],angles['Me-Go^LIe-LIa'],angles['UIe-UIa^LIe-LIa']];
   width:string|null = "";
   height:string|null = "";
@@ -260,6 +260,22 @@ export class CephLibComponent {
           interpretation  :"",typeOfMeasurement: ''
         }
       }
+     if(distance.name == "Pg-NB" || distance.name == "U1-NA"){
+      const distanceObj = calculatePointToLine(this.pointsArray)
+      return {
+        id : distance.id,
+        name : distance.name,
+        description: distance.description,
+        mean: distance.mean,
+        deviation: distance.deviation,
+        value: distanceObj?.distance,
+        typeOfMeasurement : distance.typeOfMeasurement,
+        interpretation:
+          distanceValue === undefined
+            ? ''
+            : distanceValue > max ? distance.inc : distanceValue < min ? distance.dec : distance.norm
+      }
+     }
     return {
       id: distance.id,
       name : distance.name,
@@ -344,17 +360,7 @@ export class CephLibComponent {
     return true
   }
   checkSpecificCases(event:any){
-  // Checking for specific points and creating Arbitrary points
-  if(this.pointNameAlias == "Pog"){
-    let pointBXCoord = this.pointsArray['B'].x
-    let pointBYCoord = this.pointsArray['B'].y
-    this.pointsArray['Arb'] = {
-      pointName : "",
-      x: pointBXCoord - 2,
-      y : pointBYCoord + 35,
-      point_name_alias : ''
-    }
-  }
+  
 
   console.log(this.pointsArray)
    // Checking for the intersection of the points. 

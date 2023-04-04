@@ -1,5 +1,6 @@
 import html2canvas from "html2canvas"; 
 import {jsPDF} from "jspdf";
+import { pointsLines } from "./pointToLines";
 var resultDataUrl:any;
 let isLoaded = false;
 export const convertImageToBase64URL = (items: FileList): boolean =>{
@@ -116,3 +117,35 @@ export const calculateIntersection =  (p1 : any, p2 : any, p3 : any, p4 : any) =
 
     return p;
 } 
+
+export const calculatePointToLine = (pointsArray:any) => {
+
+     if(pointsArray["Pog"] != undefined && pointsArray["N"] != undefined  && pointsArray["B"] != undefined){
+        const pg_nb_point_1 = pointsLines['PogVN-B'].id.split("V")[0];
+        const pg_nb_point_2 = pointsLines['PogVN-B'].id.split("V")[1].split("-")[0]
+        const pg_nb_point_3 = pointsLines['PogVN-B'].id.split("V")[1].split("-")[1]
+
+        var pg_nb_distance = 2*(12*(pointsArray[pg_nb_point_1].x * (pointsArray[pg_nb_point_2].y - pointsArray[pg_nb_point_3].y) + pointsArray[pg_nb_point_2].x * (pointsArray[pg_nb_point_3].y - pointsArray[pg_nb_point_1].y) + pointsArray[pg_nb_point_3].x * (pointsArray[pg_nb_point_1].y - pointsArray[pg_nb_point_2].y))) / Math.sqrt(Math.pow(pointsArray[pg_nb_point_2].x - pointsArray[pg_nb_point_3].x, 2) + Math.pow(pointsArray[pg_nb_point_2].y - pointsArray[pg_nb_point_3].y,2))
+        return {"distance" : Math.abs(Math.floor(pg_nb_distance/100))}
+     }
+
+     if(pointsArray["UIe"] != undefined && pointsArray['N'] != undefined && pointsArray['A'] != undefined){
+        const u1_na_point_1 = pointsLines['UIeVN-A'].id.split("V")[0];
+        const u1_na_point_2 = pointsLines['UIeVN-A'].id.split("V")[1].split("-")[0]
+        const u1_na_point_3 = pointsLines['UIeVN-A'].id.split("V")[1].split("-")[1]
+
+         var u1_na_distance = 2*(12*(pointsArray[u1_na_point_1].x * (pointsArray[u1_na_point_2].y - pointsArray[u1_na_point_3].y) + pointsArray[u1_na_point_2].x * (pointsArray[u1_na_point_3].y - pointsArray[u1_na_point_1].y) + pointsArray[u1_na_point_3].x * (pointsArray[u1_na_point_1].y - pointsArray[u1_na_point_2].y))) / Math.sqrt(Math.pow(pointsArray[u1_na_point_2].x - pointsArray[u1_na_point_3].x, 2) + Math.pow(pointsArray[u1_na_point_2].y - pointsArray[u1_na_point_3].y,2))
+         return {"distance" : Math.abs(Math.floor(u1_na_distance/100))}
+
+     } 
+     if(pointsArray["LIe"] != undefined && pointsArray['N'] != undefined && pointsArray['B'] != undefined){
+        const l1_nb_point_1 = pointsLines['LIeVN-B'].id.split("V")[0];
+        const l1_nb_point_2 = pointsLines['LIeVN-B'].id.split("V")[1].split("-")[0]
+        const l1_nb_point_3 = pointsLines['LIeVN-B'].id.split("V")[1].split("-")[1]
+
+         var l1_nb_distance = 2*(12*(pointsArray[l1_nb_point_1].x * (pointsArray[l1_nb_point_2].y - pointsArray[l1_nb_point_3].y) + pointsArray[l1_nb_point_2].x * (pointsArray[l1_nb_point_3].y - pointsArray[l1_nb_point_1].y) + pointsArray[l1_nb_point_3].x * (pointsArray[l1_nb_point_1].y - pointsArray[l1_nb_point_2].y))) / Math.sqrt(Math.pow(pointsArray[l1_nb_point_2].x - pointsArray[l1_nb_point_3].x, 2) + Math.pow(pointsArray[l1_nb_point_2].y - pointsArray[l1_nb_point_3].y,2))
+         return {"distance" : Math.abs(Math.floor(l1_nb_distance/100))}
+
+     }
+
+}

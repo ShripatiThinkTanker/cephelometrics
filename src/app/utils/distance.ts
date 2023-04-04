@@ -47,7 +47,7 @@ export const distance: {[k:string] : Distance} = {
 		norm : "",
 		typeOfMeasurement : "Linear",
 	},
-	'UIe-A':{
+	'UIe-Arb':{
 		id : "UIe-A",
 		name : "U1-NA(Linear)",
 		description : "",
@@ -58,7 +58,7 @@ export const distance: {[k:string] : Distance} = {
 		norm : "",
 		typeOfMeasurement : "Linear"
 	},
-	'LIe-B':{
+	'LIe-Arb':{
 		id : "LIe-B",
 		name : "L1-NB(Linear)",
 		description : "",
