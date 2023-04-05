@@ -91,14 +91,16 @@ export class CephLibComponent {
           pointName : element.poinName,
           x: element.x,
           y: element.y,
-          point_name_alias : element.point_name_alias
+          point_name_alias : element.point_name_alias,
+          isAdded : true
         }
 
         this.pointsArray[element.point_name_alias] = {
           pointName : element.poinName,
           x: element.x,
           y: element.y,
-          point_name_alias : element.point_name_alias
+          point_name_alias : element.point_name_alias,
+          isAdded : true,
         }
       })
 
@@ -260,15 +262,16 @@ export class CephLibComponent {
           interpretation  :"",typeOfMeasurement: ''
         }
       }
-     if(distance.name == "Pg-NB" || distance.name == "U1-NA"){
-      const distanceObj = calculatePointToLine(this.pointsArray)
+      let distanceObj = calculatePointToLine(this.pointsArray)
+      console.log(distanceObj)
+     if(distance.name == "Pg-NB" && distanceObj!["Pg-NB"] != undefined|| distance.name == "U1-NA(Linear)" && distanceObj!["U1-NA(Linear)"] != undefined || distance.name == "L1-NB(Linear)" && distanceObj!["L1-NB(Linear)"] != undefined){
       return {
         id : distance.id,
         name : distance.name,
         description: distance.description,
         mean: distance.mean,
         deviation: distance.deviation,
-        value: distanceObj?.distance,
+        value: distanceObj[distance.name].final_measurement,
         typeOfMeasurement : distance.typeOfMeasurement,
         interpretation:
           distanceValue === undefined
@@ -349,7 +352,8 @@ export class CephLibComponent {
       pointName: this.pointName,
       x: event.offsetX - 3,
       y: event.offsetY - 3,
-      point_name_alias: this.pointNameAlias
+      point_name_alias: this.pointNameAlias,
+      isAdded: true
     }
     // check Specific Cases
     this.checkSpecificCases(event);
@@ -377,7 +381,8 @@ export class CephLibComponent {
         pointName : "B Compliment",
         x: newPoint.x,
         y : newPoint.y,
-        point_name_alias : "B!"
+        point_name_alias : "B!",
+        isAdded : true,
       }
       }
       // End of B! 
@@ -394,7 +399,8 @@ export class CephLibComponent {
           pointName : "A Compliment",
           x : newPoint.x + 5,
           y : newPoint.y + 5,
-          point_name_alias : "A!"
+          point_name_alias : "A!",
+          isAdded : true
         }
   
       }
@@ -408,6 +414,7 @@ export class CephLibComponent {
       newPoints.forEach((element) => {
         this.lineArr.forEach((element1:any) => {  
           if(this.pointsArray[element] != undefined){ 
+            this.pointsArray[element].isAdded = false
           if(this.pointsArray[element].point_name_alias == this.options[index].pointAlias){
             delete this.pointsArray[element]
             // this.count = index

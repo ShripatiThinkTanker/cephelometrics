@@ -3,4 +3,5 @@ export interface IPoints{
     x:number;
     y:number;
     point_name_alias : string;
+    isAdded : boolean
 }
