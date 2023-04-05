@@ -10,6 +10,7 @@ import { globalSettings } from '../utils/globalSettings';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { distance } from '../utils/distance';
+
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -294,7 +295,7 @@ export class CephLibComponent {
     };
     })
   }
-  calculateDistance(pointA:any, pointB:any){
+  calculateDistance(pointA:IPoints, pointB:IPoints){
     if(pointA !== undefined || pointB.x !== undefined){
       let x1 = pointA.x;
       let y1 = pointA.y;

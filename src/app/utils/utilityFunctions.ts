@@ -1,6 +1,8 @@
 import html2canvas from "html2canvas"; 
 import {jsPDF} from "jspdf";
 import { pointsLines } from "./pointToLines";
+import { IPoints } from "../interfaces/pointInterface";
+import { IPoint } from "fabric/fabric-impl";
 var resultDataUrl:any;
 let isLoaded = false;
 export const convertImageToBase64URL = (items: FileList): boolean =>{
@@ -118,7 +120,7 @@ export const calculateIntersection =  (p1 : any, p2 : any, p3 : any, p4 : any) =
     return p;
 } 
 
-export const calculatePointToLine = (pointsArray:any) => {
+export const calculatePointToLine = (pointsArray:{[k:string]:IPoint}) => {
     var distance:any = {};
      if(pointsArray["Pog"] != undefined && pointsArray["N"] != undefined  && pointsArray["B"] != undefined){
         const pg_nb_point_1 = pointsLines['PogVN-B'].id.split("V")[0];
