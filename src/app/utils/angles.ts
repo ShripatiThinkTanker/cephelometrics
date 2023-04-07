@@ -50,18 +50,18 @@ export const angles : {[k: string] : Angle} = {
 		typeOfMeasurement : "Angular",
 	}, 
 	//SN-Pg
-	'S-N^Pog-N': {
-		id: 'S-N^Pog-N',
-		name : "SN-Pg",
-		description:
-			'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
-		mean: 80,
-		deviation: 5.9,
-		inc: 'Concave skeletal profile',
-		dec: 'Convex skeletal profile',
-		norm: 'Straight skeletal profile',
-		typeOfMeasurement : "Angular",
-	},
+	// 'S-N^Pog-N': {
+	// 	id: 'S-N^Pog-N',
+	// 	name : "SN-Pg",
+	// 	description:
+	// 		'The angle of convexity is a measure of maxillary protrusion in relation to the total profile and is the angle formed between lines running from N–A to A–Pog.',
+	// 	mean: 80,
+	// 	deviation: 5.9,
+	// 	inc: 'Concave skeletal profile',
+	// 	dec: 'Convex skeletal profile',
+	// 	norm: 'Straight skeletal profile',
+	// 	typeOfMeasurement : "Angular",
+	// },
 	//NPg-FH
 	'P-O^N-Pog': {
 		id: 'P-O^N-Pog',

@@ -29,8 +29,8 @@ export class CephLibComponent {
   options:Array<pointList> = []; 
   pointNameAlias:string = "";
   pointsArray:{[k: string] : IPoints} = {};
-  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-Arb'], distance['apOcP-ppOcP'], distance['A!-B!'], distance['UIe-Arb'], distance['LIe-Arb']]
-  strinerAngles = [angles['S-N^N-A'],angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['S-N^Pog-N'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-S'], angles['S-N^UIe-UIa'],angles['UIe-UIa^N-A'],angles['LIe-LIa^N-B'],angles['Me-Go^LIe-LIa'],angles['UIe-UIa^LIe-LIa']];
+  steinerDistance = [distance['C1-C2'],distance['ANS-Me'], distance['ANS-N'], distance['Pog-NB'], distance['apOcP-ppOcP'], distance['UIe-Arb'], distance['LIe-Arb']]
+  strinerAngles = [angles['S-N^N-A'],angles['S-N^N-B'], angles['N-B^N-A'], angles['S-N^Me-Go'], angles['P-O^N-Pog'], angles['P-O^Me-Go'], angles['S-N^Gn-S'], angles['P-O^N-A'], angles['P-O^Gn-S'], angles['S-N^UIe-UIa'],angles['UIe-UIa^N-A'],angles['LIe-LIa^N-B'],angles['Me-Go^LIe-LIa'],angles['UIe-UIa^LIe-LIa']];
   width:string|null = "";
   height:string|null = "";
   previewImage:string = "";
@@ -357,7 +357,7 @@ export class CephLibComponent {
       isAdded: true
     }
     // check Specific Cases
-    this.checkSpecificCases(event);
+    // this.checkSpecificCases(event);
     this.lineArr = this.lines;
     this.anglesArr = this.anglesValues.concat(this.distanceValues);
     console.log(this.anglesArr)

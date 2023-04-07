@@ -36,8 +36,8 @@ export const distance: {[k:string] : Distance} = {
 		norm: 'Normal maxillary plane growth',
 		typeOfMeasurement : "Linear",
 	},
-	'Pog-Arb':{
-		id : "Pog-Arb",
+	'Pog-NB':{
+		id : "Pog-NB",
 		name : "Pg-NB",
 		description: "Maxillary plane to cranial base",
 		mean : 3,
@@ -89,15 +89,15 @@ export const distance: {[k:string] : Distance} = {
 		norm : "",
 		typeOfMeasurement : "Linear"
 	},
-	'A!-B!' : {
-		id: 'A!-B!',
-		name : "A!-B!",
-		description : "",
-		mean : 1,
-		deviation : 2,
-		inc : "",
-		dec : "",
-		norm : "",
-		typeOfMeasurement : "Linear"
-	}
+	// 'A!-B!' : {
+	// 	id: 'A!-B!',
+	// 	name : "A!-B!",
+	// 	description : "",
+	// 	mean : 1,
+	// 	deviation : 2,
+	// 	inc : "",
+	// 	dec : "",
+	// 	norm : "",
+	// 	typeOfMeasurement : "Linear"
+	// }
 }
