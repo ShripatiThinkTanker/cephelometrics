@@ -4,6 +4,7 @@ import { pointsLines } from "./pointToLines";
 import { IPoints } from "../interfaces/pointInterface";
 import { IPoint } from "fabric/fabric-impl";
 var resultDataUrl:any;
+
 let isLoaded = false;
 export const convertImageToBase64URL = (items: FileList): boolean =>{
     for(let i = 0; i < items.length; i++){
@@ -121,7 +122,7 @@ export const calculateIntersection =  (p1 : any, p2 : any, p3 : any, p4 : any) =
 } 
 
 export const calculatePointToLine = (pointsArray:{[k:string]:IPoint}) => {
-    var distance:any = {};
+    var distance:any = {};      
      if(pointsArray["Pog"] != undefined && pointsArray["N"] != undefined  && pointsArray["B"] != undefined){
         const pg_nb_point_1 = pointsLines['PogVN-B'].id.split("V")[0];
         const pg_nb_point_2 = pointsLines['PogVN-B'].id.split("V")[1].split("-")[0]
@@ -131,19 +132,19 @@ export const calculatePointToLine = (pointsArray:{[k:string]:IPoint}) => {
         distance['Pg-NB'] = {"final_measurement" :  Math.abs(Math.floor(pg_nb_distance/100))}
      }
 
-     if(pointsArray["UIe"] != undefined && pointsArray['N'] != undefined && pointsArray['A'] != undefined){
-        const u1_na_point_1 = pointsLines['UIeVN-A'].id.split("V")[0];
-        const u1_na_point_2 = pointsLines['UIeVN-A'].id.split("V")[1].split("-")[0]
-        const u1_na_point_3 = pointsLines['UIeVN-A'].id.split("V")[1].split("-")[1]
+     if(pointsArray["UIl"] != undefined && pointsArray['N'] != undefined && pointsArray['A'] != undefined){
+        const u1_na_point_1 = pointsLines['UIlVN-A'].id.split("V")[0];
+        const u1_na_point_2 = pointsLines['UIlVN-A'].id.split("V")[1].split("-")[0]
+        const u1_na_point_3 = pointsLines['UIlVN-A'].id.split("V")[1].split("-")[1]
 
          var u1_na_distance = 2*(12*(pointsArray[u1_na_point_1].x * (pointsArray[u1_na_point_2].y - pointsArray[u1_na_point_3].y) + pointsArray[u1_na_point_2].x * (pointsArray[u1_na_point_3].y - pointsArray[u1_na_point_1].y) + pointsArray[u1_na_point_3].x * (pointsArray[u1_na_point_1].y - pointsArray[u1_na_point_2].y))) / Math.sqrt(Math.pow(pointsArray[u1_na_point_2].x - pointsArray[u1_na_point_3].x, 2) + Math.pow(pointsArray[u1_na_point_2].y - pointsArray[u1_na_point_3].y,2))
          distance['U1-NA(Linear)'] = {"final_measurement" : Math.abs(Math.floor(u1_na_distance/100))}
 
      } 
-     if(pointsArray["LIe"] != undefined && pointsArray['N'] != undefined && pointsArray['B'] != undefined){
-        const l1_nb_point_1 = pointsLines['LIeVN-B'].id.split("V")[0];
-        const l1_nb_point_2 = pointsLines['LIeVN-B'].id.split("V")[1].split("-")[0]
-        const l1_nb_point_3 = pointsLines['LIeVN-B'].id.split("V")[1].split("-")[1]
+     if(pointsArray["LIl"] != undefined && pointsArray['N'] != undefined && pointsArray['B'] != undefined){
+        const l1_nb_point_1 = pointsLines['LIlVN-B'].id.split("V")[0];
+        const l1_nb_point_2 = pointsLines['LIlVN-B'].id.split("V")[1].split("-")[0]
+        const l1_nb_point_3 = pointsLines['LIlVN-B'].id.split("V")[1].split("-")[1]
 
          var l1_nb_distance = 2*(12*(pointsArray[l1_nb_point_1].x * (pointsArray[l1_nb_point_2].y - pointsArray[l1_nb_point_3].y) + pointsArray[l1_nb_point_2].x * (pointsArray[l1_nb_point_3].y - pointsArray[l1_nb_point_1].y) + pointsArray[l1_nb_point_3].x * (pointsArray[l1_nb_point_1].y - pointsArray[l1_nb_point_2].y))) / Math.sqrt(Math.pow(pointsArray[l1_nb_point_2].x - pointsArray[l1_nb_point_3].x, 2) + Math.pow(pointsArray[l1_nb_point_2].y - pointsArray[l1_nb_point_3].y,2))
          distance['L1-NB(Linear)'] = {"final_measurement" : Math.abs(Math.floor(l1_nb_distance/100))}
@@ -151,3 +152,37 @@ export const calculatePointToLine = (pointsArray:{[k:string]:IPoint}) => {
      }
      return distance
 }
+
+
+export const calculateWitsAppraisal = (pointsArray :  {[k:string] : IPoint}) => {
+    if(pointsArray["apOcP"] != undefined && pointsArray["ppOcP"] && pointsArray["A"] != undefined && pointsArray["B"] != undefined){
+        // let x1,y1 = apOcP
+        // let x2,y2 = ppOcP
+        // let x0,y0 = a
+        // let x4,y4 = b
+
+        // Objective is to find A' and B'
+
+        let pointapocp = pointsArray["apOcP"];
+        let pointppocp = pointsArray["ppOcP"];
+
+        let pointA = pointsArray["A"];
+        let pointB = pointsArray["B"];
+
+        // find x0' and y0'
+        console.log("The Coordinates for all the four points are: ", {pointapocp, pointppocp, pointA, pointB})        
+        let a = pointppocp.y - pointapocp.y
+        let b = pointppocp.x - pointapocp.x
+
+        let c = (pointapocp.x * pointppocp.y) - (pointppocp.x * pointapocp.y)
+
+
+        console.log("Value For A,B,C are",a,b,c)
+
+        let x0Comp = b*(b*(pointA.x) - a*(pointA.y)) - a*(c) / Math.pow(a,2)  + Math.pow(b,2)
+
+        console.log("Value For X0' is ",x0Comp)
+
+     }
+}
+

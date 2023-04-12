@@ -21,10 +21,10 @@ export class CephListComponent implements OnInit {
     }
     
     openCephelometricStudy(id:string){
-        this.router.navigate(['cephelometrics/open',btoa(id)])
+        this.router.navigate(['cephalometrics/open',btoa(id)])
     }
 
     addNew(){
-      this.router.navigate(['cephelometrics/addNew']);
+      this.router.navigate(['cephalometrics/addNew']);
     }
 }

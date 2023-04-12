@@ -7,22 +7,22 @@ import { CephelometricsComponent } from './cephelometrics/cephelometrics.compone
 
 const routes: Routes = [
     {
-      path : "cephelometrics/addNew",
+      path : "cephalometrics/addNew",
       component : AddEditCephelometricsComponent,
       data: {title : "Cephelometrics Add page"}
     },
     {
-      path : "cephelometrics/open",
+      path : "cephalometrics/open",
       component : CephelometricsComponent,
       data : {title: "Cephelometrics Open"}
     },
     {
-      path : "cephelometrics",
+      path : "cephalometrics",
       component : CephListComponent,
       data : {title : "Cephelometrics List"}
     },
     {
-      path : "cephelometrics/open/:id",
+      path : "cephalometrics/open/:id",
       component : CephelometricsComponent,
       data : {title : "Cephelometrics open With ID"}
     }

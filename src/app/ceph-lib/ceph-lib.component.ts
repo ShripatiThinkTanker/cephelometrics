@@ -3,7 +3,7 @@ import Panzoom from '@panzoom/panzoom';
 import { IPoints } from '../interfaces/pointInterface';
 import { angles } from '../utils/angles';
 import {pointList, steinerPoints } from '../utils/steinerPoints';
-import { calculateAngle, calculateIntersection, calculatePointToLine, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
+import { calculateAngle, calculateIntersection, calculatePointToLine, calculateWitsAppraisal, converDivToJPEG, convertDivToPDF } from '../utils/utilityFunctions';
 import { Router,ActivatedRoute } from '@angular/router';
 import { CephelometricsService } from '../services/cephelometrics.service';
 import { globalSettings } from '../utils/globalSettings';
@@ -161,7 +161,7 @@ export class CephLibComponent {
           angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
 
           if(id == "Me-Go" || id == "Gn-S" || id == "Pog-Arb"){
-            x_left = Math.floor((x1 + x2) / 2 - 3000 / 2)  + 3
+            x_left = Math.floor((x1 + x2) / 2 - 3000 / 2)  + 2
             x_top = Math.floor((y1 + y2) / 2 - 1 / 2) + 2;
           }
           else{
@@ -265,6 +265,7 @@ export class CephLibComponent {
       }
       let distanceObj = calculatePointToLine(this.pointsArray)
       console.log(distanceObj)
+      calculateWitsAppraisal(this.pointsArray)
      if(distance.name == "Pg-NB" && distanceObj!["Pg-NB"] != undefined|| distance.name == "U1-NA(Linear)" && distanceObj!["U1-NA(Linear)"] != undefined || distance.name == "L1-NB(Linear)" && distanceObj!["L1-NB(Linear)"] != undefined){
       return {
         id : distance.id,

@@ -8,12 +8,13 @@ export const pointsLines : {[k: string] : pointToLine} = {
         id : 'PogVN-B',
         name : "Pg-NB"
     },
-    'UIeVN-A':{
-        id : 'UIeVN-A',
+    'UIlVN-A':{
+        id : 'UIlVN-A',
         name : "U1-NA(Linear)"
     },
-    'LIeVN-B':{
-        id : 'LIeVN-B',
+    'LIlVN-B':{
+        id : 'LIlVN-B',
         name : "L1-NB(Linear)"
     }
+    
 }
