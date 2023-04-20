@@ -50,7 +50,9 @@ export class CephLibComponent {
   allPointsCompleted:boolean = false
   magnifier:any;
   div:any
-  element:any;
+  ImageElement:any;
+  TableElement:any;
+
   pointAID:any;
   pointBID:any;
   ans_me_dist : number = 0;
@@ -77,7 +79,8 @@ export class CephLibComponent {
     
     this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
     this.options = steinerPoints;
-    this.element = document.querySelector('.card-body') as HTMLElement;
+    this.ImageElement = document.querySelector('.overlay') as HTMLElement;
+    this.TableElement = document.querySelector('.data-table')
     this.div = document.querySelector('.overlay') as HTMLDivElement;
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
       this.count = Object.keys(result.data.points).length;
@@ -265,7 +268,7 @@ export class CephLibComponent {
       }
       let distanceObj = calculatePointToLine(this.pointsArray)
       console.log(distanceObj)
-      calculateWitsAppraisal(this.pointsArray)
+      let witsAppraisal = calculateWitsAppraisal(this.pointsArray)
      if(distance.name == "Pg-NB" && distanceObj!["Pg-NB"] != undefined|| distance.name == "U1-NA(Linear)" && distanceObj!["U1-NA(Linear)"] != undefined || distance.name == "L1-NB(Linear)" && distanceObj!["L1-NB(Linear)"] != undefined){
       return {
         id : distance.id,
@@ -274,6 +277,22 @@ export class CephLibComponent {
         mean: distance.mean,
         deviation: distance.deviation,
         value: distanceObj[distance.name].final_measurement,
+        typeOfMeasurement : distance.typeOfMeasurement,
+        interpretation:
+          distanceValue === undefined
+            ? ''
+            : distanceValue > max ? distance.inc : distanceValue < min ? distance.dec : distance.norm
+      }
+     }
+
+     if(distance.name == "apOcP-ppOcP" && witsAppraisal!= undefined){
+      return {
+        id : distance.id,
+        name : distance.name,
+        description: distance.description,
+        mean: distance.mean,
+        deviation: distance.deviation,
+        value: Math.floor(witsAppraisal[distance.name].final_measurement * this.calibrationDist),
         typeOfMeasurement : distance.typeOfMeasurement,
         interpretation:
           distanceValue === undefined
@@ -475,10 +494,10 @@ export class CephLibComponent {
     }
   }
    exportToJPEG(){
-     converDivToJPEG(this.element, "CephalometricAnalysis")
+     converDivToJPEG(this.ImageElement, "CephalometricAnalysis")
   }
    exportToPDF(){
-    convertDivToPDF(this.element, "CephalometricAnalysis")
+    convertDivToPDF(this.ImageElement,this.TableElement,"CephalometricAnalysis")
    }
 
    showImageSettings(){

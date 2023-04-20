@@ -81,8 +81,9 @@ export const distance: {[k:string] : Distance} = {
 	},
 	'apOcP-ppOcP':{
 		id: 'apOcP-ppOcP',
+		name : "apOcP-ppOcP",
 		description : "",
-		mean : 3,
+		mean : 1,
 		deviation : 2,
 		inc : "",
 		dec : "",

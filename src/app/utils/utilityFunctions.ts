@@ -64,14 +64,23 @@ export const converDivToJPEG = async(element:HTMLDivElement, imageName:string) =
 
 }
 
-export const convertDivToPDF = async(element:HTMLDivElement, docname:string) =>{
+export const convertDivToPDF = async(element:HTMLDivElement, tableElement:any,docname:string) =>{
     const canvas = await html2canvas(element,{
-        width: 2000,
+        width: 899,
         height: 800
     });
     const image = canvas.toDataURL('image/png');
     console.log(image)
-    downloadPDF(image,docname)
+
+    const tableCanvas = await html2canvas(tableElement,{
+        width:1527,
+        height:474
+    });
+
+    const tableImage = tableCanvas.toDataURL("image/png");
+    
+
+    downloadPDF(image,tableImage,docname)
 }
 
  export const downloadImage = (image:any,imageName:string) => {
@@ -88,9 +97,12 @@ export const convertDivToPDF = async(element:HTMLDivElement, docname:string) =>{
     fakeLink.remove();
 }
 
-export const downloadPDF = (image:any, docName:string) => {
+export const downloadPDF = (image:any, tableElement:any ,docName:string) => {
     var pdf = new jsPDF('l','px',[1700,800]);
-    pdf.addImage(image, 'PNG', 10,10,1700,800);
+    pdf.addImage(image, 'PNG', 10,10,899,800);
+    pdf.addPage()
+    console.log(tableElement)
+    pdf.addImage(tableElement,'PNG',10,10,1525,472)
     pdf.save(docName+'.pdf');
 }
 
@@ -155,34 +167,20 @@ export const calculatePointToLine = (pointsArray:{[k:string]:IPoint}) => {
 
 
 export const calculateWitsAppraisal = (pointsArray :  {[k:string] : IPoint}) => {
-    if(pointsArray["apOcP"] != undefined && pointsArray["ppOcP"] && pointsArray["A"] != undefined && pointsArray["B"] != undefined){
-        // let x1,y1 = apOcP
-        // let x2,y2 = ppOcP
-        // let x0,y0 = a
-        // let x4,y4 = b
+    var x0y0Comp:any;
+    var x4y4Comp:any;
+    var distance:any = {};   
+   if(pointsArray['apOcP'] != undefined && pointsArray['ppOcP'] != undefined && pointsArray['N'] != undefined && pointsArray['A'] != undefined || pointsArray['apOcP'] != undefined && pointsArray['ppOcP'] != undefined && pointsArray['N'] != undefined && pointsArray['B'] != undefined){
+        x0y0Comp = calculateIntersection(pointsArray['apOcP'], pointsArray['ppOcP'], pointsArray['N'], pointsArray['A'])
+        x4y4Comp = calculateIntersection(pointsArray['apOcP'], pointsArray['ppOcP'], pointsArray['N'], pointsArray['B'])
+        distance['apOcP-ppOcP'] = {"final_measurement":Math.floor(Math.sqrt((x4y4Comp.x - x0y0Comp.x) * (x4y4Comp.x - x0y0Comp.x) + (x4y4Comp.y - x0y0Comp.y) * (x4y4Comp.y - x0y0Comp.y)) * (0.2645833333))}
+        return distance
+   }
 
-        // Objective is to find A' and B'
-
-        let pointapocp = pointsArray["apOcP"];
-        let pointppocp = pointsArray["ppOcP"];
-
-        let pointA = pointsArray["A"];
-        let pointB = pointsArray["B"];
-
-        // find x0' and y0'
-        console.log("The Coordinates for all the four points are: ", {pointapocp, pointppocp, pointA, pointB})        
-        let a = pointppocp.y - pointapocp.y
-        let b = pointppocp.x - pointapocp.x
-
-        let c = (pointapocp.x * pointppocp.y) - (pointppocp.x * pointapocp.y)
-
-
-        console.log("Value For A,B,C are",a,b,c)
-
-        let x0Comp = b*(b*(pointA.x) - a*(pointA.y)) - a*(c) / Math.pow(a,2)  + Math.pow(b,2)
-
-        console.log("Value For X0' is ",x0Comp)
-
-     }
 }
+
+
+
+
+
 
