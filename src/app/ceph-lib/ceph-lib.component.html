@@ -108,11 +108,11 @@
     </div>
     <div class="col-md-6 col-sm-12 last-div border  p-0  mt-5 ">
       <!-- <div class="ms-auto p-3 bg-secondary w-100"> -->
-      <div class=" btn-bg rounded mt-2 mx-auto  action-div">
+      <div class=" btn-bg rounded mt-2 mx-auto  action-div" style = "position:relative;z-index:100">
         <div class="d-flex justify-content-end">
-          <mat-icon class="m-2 text-secondary  ">refresh</mat-icon>
-          <mat-icon class="m-2 text-secondary">zoom_out</mat-icon>
-          <mat-icon class="m-2 text-secondary">zoom_in</mat-icon>
+          <mat-icon class="m-2 text-secondary " (click)="reset()">refresh</mat-icon>
+          <mat-icon class="m-2 text-secondary" (click)="zoomOut()">zoom_out</mat-icon>
+          <mat-icon class="m-2 text-secondary" (click)="zoomIn()">zoom_in</mat-icon>
 
         </div>
       </div>
