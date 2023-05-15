@@ -1,130 +1,136 @@
+<!-- Navbar starts here -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <div class="container-fluid justify-content-centerq">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <button class="btn btn-outline-success mx-2  my-2 nav-btn" (click)="submitPayload()">
+        <mat-icon class="align-middle">save</mat-icon><span class="align-middle">Save</span>
+      </button>
+      <button class="btn btn-outline-danger mx-2" (click)="goBackToMainPage()">
+        <mat-icon class="align-middle">cancel</mat-icon>
+        <span class="align-middle">Cancel</span>
+      </button>
+      <button class="btn btn-outline-success mx-2" (click)="exportToJPEG()">
+        <mat-icon class="align-middle">cloud_download</mat-icon>
+        <span class="align-middle"> Export as JPEG </span>
+      </button>
+      <button class="btn btn-outline-success mx-2" (click)="exportToPDF()">
+        <mat-icon class="align-middle">cloud_download</mat-icon>
+        <span class="align-middle"> Export as PDF </span>
+      </button>
+      <button class="btn btn-outline-success mx-2" (click)="showImageSettings()">
+        <mat-icon class="align-middle">settings</mat-icon>
+        <span class="align-middle"> Image settings </span>
+      </button>
+      <button class="btn btn-outline-primary mx-2" (click)="resetAllPoints()">
+        <mat-icon class="align-middle"> loop </mat-icon>
+        <span class="align-middle">Reset</span>
+      </button>
 
-    <!-- Navbar starts here -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <div class="container-fluid justify-content-centerq">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <button class="btn btn-outline-success mx-2  my-2 nav-btn" (click)="submitPayload()">
-                    <mat-icon class="align-middle">save</mat-icon><span class="align-middle">Save</span>
-                </button>
-                <button class="btn btn-outline-danger mx-2" (click)="goBackToMainPage()">
-                    <mat-icon class="align-middle">cancel</mat-icon>
-                    <span class="align-middle">Cancel</span>
-                </button>
-                <button class="btn btn-outline-success mx-2" (click)="exportToJPEG()">
-                    <mat-icon class="align-middle">cloud_download</mat-icon>
-                    <span class="align-middle"> Export as JPEG </span>
-                </button>
-                <button class="btn btn-outline-success mx-2" (click)="exportToPDF()">
-                    <mat-icon class="align-middle">cloud_download</mat-icon>
-                    <span class="align-middle"> Export as PDF </span>
-                </button>
-                <button class="btn btn-outline-success mx-2" (click)="showImageSettings()">
-                    <mat-icon class="align-middle">settings</mat-icon>
-                    <span class="align-middle"> Image settings </span>
-                </button>
-                <button class="btn btn-outline-primary mx-2" (click)="resetAllPoints()">
-                    <mat-icon class="align-middle"> loop </mat-icon>
-                    <span class="align-middle">Reset</span>
-                </button>
+      <!-- <div class="actions">
+        <button class="zoomIn btn btn-outline-primary ms-5" (click)="zoomIn()">
+          +
+        </button>
+        <button class="zoomOut btn btn-outline-primary mx-2" (click)="zoomOut()">
+          -
+        </button>
+        <button class="reset btn btn-outline-primary mx-2" (click)="reset()">
+          Reset
+        </button>
+      </div> -->
+    </div>
+  </div>
+</nav>
+<!-- Navbar end here -->
 
-                <div class="actions">
-                    <button class="zoomIn btn btn-outline-primary ms-5" (click)="zoomIn()">
-                        +
-                    </button>
-                    <button class="zoomOut btn btn-outline-primary mx-2" (click)="zoomOut()">
-                        -
-                    </button>
-                    <button class="reset btn btn-outline-primary mx-2" (click)="reset()">
-                        Reset
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- Navbar end here -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2  col-sm-4  card py-2 sidebar-div">
+      <span class="m-0 p-0 fw-bolder fs-6">Analysis</span>
+      <select class="form-select my-2" aria-label="Default select example">
+        <option>select</option>
+        <option value="1">Steiner</option>
+      </select>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-2 card py-2 h-50">
-                <span class="m-0 p-0 fw-bolder fs-6">Analysis</span>
-                <select class="form-select my-2" aria-label="Default select example">
-                    <option>select</option>
-                    <option value="1">Steiner</option>
-                </select>
-
-                <div class="overflow-auto sidebar">
-                    <table class="menu-title" style="
-                    margin-top: 50px;
+      <div class="overflow-auto sidebar">
+        <table class="menu-title" style="
+                    margin-top: 30px;
                     border-collapse: separate;
                     border-spacing: 0 15px;
                   ">
-                        <tr *ngFor="let option of options; let i = index">
-                          <ng-container *ngIf="option.isActive; else cond2">
-                            <td (click)="selectedIndex(i)">
-                              <input type="checkbox" /><a class="link-btns">{{
-                                option.pointName
-                                }}</a>
-                            </td>
-                          </ng-container>
-        
-                          <ng-template #cond2>
-                            <td>
-                              <input type="checkbox" checked disabled /><a class="link-btns-disabled">{{ option.pointName }}
-                              </a>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <mat-icon (click)="removePoint(i)" style="font-size: 18px; float: right">loop</mat-icon>
-                            </td>
-                          </ng-template>
-                        </tr>
-                      </table>
-                </div>
+          <tr *ngFor="let option of options; let i = index">
+            <ng-container *ngIf="option.isActive; else cond2">
+              <td (click)="selectedIndex(i)">
+                <input type="checkbox" class="clickCheckbox" /><a class="link-btns">{{
+                  option.pointName
+                  }}</a>
+              </td>
+            </ng-container>
 
-              
-            </div>
-            <div class="col-4 col-md-4 bg-light mt-5 pt-3">
-                <div class="card py-4 shadow ">
-                    <div class="ms-auto me-3">
-                        <i class="fa-solid fa-volume-high text-secondary"></i>
-                        <i class="fa-solid fa-volume-xmark text-secondary"></i>
-                    </div>
-                    <h6 class="text-center">Sell Turcica Midpoint (S)</h6>
-                    <div class="text-center">
-                        <i class="fa-solid fa-play px-2 text-secondary"></i>
-                        <i class="fa-solid fa-play px-2 text-secondary"></i>
-                        <i class="fa-solid fa-play px-2 text-secondary"></i>
-                        <i class="fa-solid fa-play px-2 text-secondary"></i>
-                    </div>
-                </div>
-                <div class="my-4 shadow ">
-                    <!-- <img class="middle-img"
+            <ng-template #cond2>
+              <td>
+                <input type="checkbox" checked disabled /><a class="link-btns-disabled">{{ option.pointName }}
+                </a>
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <mat-icon (click)="removePoint(i)" style="font-size: 18px; float: right">loop</mat-icon>
+              </td>
+            </ng-template>
+          </tr>
+        </table>
+      </div>
+
+
+    </div>
+
+    <div class="col-sm-8 col-md-4 bg-light1 mt-sm-0 mt-5 pt-0  ">
+      <div class=" card py-3 mt-5">
+        <div class="ms-auto me-3">
+          <mat-icon class="text-secondary">volume_off</mat-icon>
+          <mat-icon class="text-secondary mx-2">volume_up</mat-icon>
+        </div>
+        <h2 class="text-center">Sell Turcica Midpoint (S)</h2>
+        <div class="text-center">
+          <mat-icon class="bg-secondary rounded-circle text-white mx-1">skip_previous</mat-icon>
+          <mat-icon class="bg-secondary rounded-circle text-white mx-1">play_arrow</mat-icon>
+          <mat-icon class="bg-secondary rounded-circle text-white mx-1">play_arrow</mat-icon>
+          <mat-icon class="bg-secondary rounded-circle text-white mx-1">skip_next</mat-icon>
+        </div>
+      </div>
+      <div class="my-4 card ">
+        <img class="middle-img" src="{{previewImage}}" alt="previewImage" />
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 last-div border  p-0  mt-5 ">
+      <!-- <div class="ms-auto p-3 bg-secondary w-100"> -->
+      <div class=" btn-bg rounded mt-2 mx-auto  action-div">
+        <div class="d-flex justify-content-end">
+          <mat-icon class="m-2 text-secondary  ">refresh</mat-icon>
+          <mat-icon class="m-2 text-secondary">zoom_out</mat-icon>
+          <mat-icon class="m-2 text-secondary">zoom_in</mat-icon>
+
+        </div>
+      </div>
+      <div class="magnificationFactorInput ms-4 d-flex align-items-center">
+        <p class="my-2  ms-sm-5">
+
+          Enter the Magnification Factor in mm =
+        </p>
+        <form [formGroup]="calibrationMagnification">
+          <input type="text" class="my-2 ms-2" formControlName="magnificationFactor" />
+        </form>
+      </div>
+      <div class="container  mx-auto" (click)="addPoint($event)" (contextmenu)="disableContextMenu()">
+
+        <!-- <img class=" right-side-img p-2"
                         src="data:image/jpeg;base64,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"
                         alt="" /> -->
-                        <img class = "middle-img" src = "{{previewImage}}" />
-                </div>
-            </div>
-            <div class="col card border bg-light mt-5 ">
-                <!-- <div class="ms-auto p-3 bg-secondary w-100"> -->
-                    
-                <div class="bg-secondary ms-auto me-5 mt-2">
-
-                        <i class="fa-solid fa-play px-2 text-white ms-auto"></i>
-                        <i class="fa-solid fa-play px-2 text-white"></i>
-                        <i class="fa-solid fa-play px-2 text-white"></i>
-
-                </div>
-                <div class="container"(click)="addPoint($event)" (contextmenu) = "disableContextMenu()">
-                  
-                    <!-- <img class=" right-side-img p-2"
-                        src="data:image/jpeg;base64,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"
-                        alt="" /> -->
-                        <img class = "right-side-img p-2" src = "{{imageURL}}" [ngStyle]="{
+        <img class="right-side-img p-2 " src="{{imageURL}}" [ngStyle]="{
                           filter:
                             'contrast(' +
                             contrastSetting +
@@ -134,10 +140,10 @@
                             invertSetting +
                             '%)',
                             'cursor': 'crosshair'}
-                            "/>
+                            " />
 
-                            <ng-container *ngFor="let points of pointsArray | keyvalue">
-                                <span draggable="true" [ngStyle]="{
+        <ng-container *ngFor="let points of pointsArray | keyvalue">
+          <span draggable="true" [ngStyle]="{
                               display: 'block',
                               position: 'absolute',
                               width: '7px',
@@ -149,9 +155,9 @@
                               'z-index': 900,
                               'pointer-events': 'none'
                             }">
-                                </span>
-              
-                              <span [ngStyle]="{
+          </span>
+
+          <span [ngStyle]="{
                               display: 'block',
                               position: 'absolute',
                               'font-size': '20px',
@@ -161,12 +167,12 @@
                               'z-index': 900,
                               'pointer-events': 'none'
                             }">{{ points.value.point_name_alias }}</span>
-                            </ng-container>
+        </ng-container>
 
-                            <ng-container *ngFor="let line of lineArr">
-                              <ng-container *ngIf="line.id != 'C1-C2' else c1c2line">
-                               
-                                <span [ngStyle]="{
+        <ng-container *ngFor="let line of lineArr">
+          <ng-container *ngIf="line.id != 'C1-C2' else c1c2line">
+
+            <span [ngStyle]="{
                               display: 'block',
                               padding: '0px',
                               margin: '0px',
@@ -181,10 +187,10 @@
                               'z-index': 900,
                               'pointer-events': 'none'
                             }"></span>
-                              </ng-container>
+          </ng-container>
 
-                              <ng-template #c1c2line>
-                                  <span [ngStyle]="{
+          <ng-template #c1c2line>
+            <span [ngStyle]="{
                                     display: 'block',
                                     padding: '0px',
                                     margin: '0px',
@@ -199,70 +205,67 @@
                                     'z-index': 900,
                                     'pointer-events': 'none'
                                   }"></span>
-                                
-                                </ng-template>
-                            </ng-container>
-                          
-                           
-                </div>
 
-            </div>
-            <div class="row">
-                <div class="col-10 ms-auto bg-light pt-5">
-                    <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>Results</th>
-                            <th>Clinical Norm</th>
-                            <th>Value</th>
-                            <th>Interpretation</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <ng-container *ngFor="let results of anglesArr">
-                            <ng-container *ngIf="results.name != ''">
-                              <ng-container *ngIf="results.id != 'C1-C2'">
-                                <ng-container *ngIf="results.typeOfMeasurement == 'Angular'; else cond5">
-                                  <tr>
-                                    <td>{{ results.name }}</td>
-                                    <td>{{ results.mean }}°</td>
-                                    <ng-container *ngIf="results.value > results.mean; else cond4">
-                                      <td>
-                                        <span style="color: red">{{ results.value }}° </span>
-                                      </td>
-                                    </ng-container>
-                                    <ng-template #cond4>
-                                      <td>
-                                        <span style="color: green">{{ results.value }}° </span>
-                                      </td>
-                                    </ng-template>
-                                    <td>{{ results.interpretation }}</td>
-                                  </tr>
-                                </ng-container>
-          
-                                <ng-template #cond5>
-                                  <tr>
-                                    <td>{{ results.name }}</td>
-                                    <td>{{ results.mean }}mm</td>
-                                    <ng-container *ngIf="results.value > results.mean; else cond6">
-                                      <td>
-                                        <span style="color: red">{{ results.value }}mm</span>
-                                      </td>
-                                    </ng-container>
-                                    <ng-template #cond6>
-                                      <td>
-                                        <span style="color: green">{{ results.value }}mm </span>
-                                      </td>
-                                    </ng-template>
-                                    <td>{{ results.interpretation }}</td>
-                                  </tr>
-                                </ng-template>
-                              </ng-container>
-                            </ng-container>
-                          </ng-container>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+          </ng-template>
+        </ng-container>
+      </div>
 
+    </div>
+    <!-- <div class="row"> -->
+    <div class="col-md-10 col-sm-12 ms-md-auto bg-light pt-5 mt-sm-5">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Results</th>
+            <th>Clinical Norm</th>
+            <th>Value</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let results of anglesArr">
+            <ng-container *ngIf="results.name != ''">
+              <ng-container *ngIf="results.id != 'C1-C2'">
+                <ng-container *ngIf="results.typeOfMeasurement == 'Angular'; else cond5">
+                  <tr>
+                    <td>{{ results.name }}</td>
+                    <td>{{ results.mean }}°</td>
+                    <ng-container *ngIf="results.value > results.mean; else cond4">
+                      <td>
+                        <span style="color: red">{{ results.value }}° </span>
+                      </td>
+                    </ng-container>
+                    <ng-template #cond4>
+                      <td>
+                        <span style="color: green">{{ results.value }}° </span>
+                      </td>
+                    </ng-template>
+                    <td>{{ results.interpretation }}</td>
+                  </tr>
+                </ng-container>
+
+                <ng-template #cond5>
+                  <tr>
+                    <td>{{ results.name }}</td>
+                    <td>{{ results.mean }}mm</td>
+                    <ng-container *ngIf="results.value > results.mean; else cond6">
+                      <td>
+                        <span style="color: red">{{ results.value }}mm</span>
+                      </td>
+                    </ng-container>
+                    <ng-template #cond6>
+                      <td>
+                        <span style="color: green">{{ results.value }}mm </span>
+                      </td>
+                    </ng-template>
+                    <td>{{ results.interpretation }}</td>
+                  </tr>
+                </ng-template>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!-- </div> -->
+  </div>

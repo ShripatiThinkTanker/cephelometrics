@@ -247,6 +247,7 @@
 
 .sidebar {
   /* height: 30rem; */
+  // width: 11rem;
   height: 50rem;
 }
 /* width */
@@ -273,11 +274,16 @@
   height: 15px;
   width: 15px;
 }
-.input:checked {
-  background-color: orange !important;
-}
-.form-check-input:checked {
-  background-color: orange;
+// input[type=checkbox]:checked{
+  
+//   // background-color: orange
+//   color: orange 
+// }
+
+input[type=checkbox] {
+    background-color: orange;
+    // position: relative;
+    // left: -999em; /* hide the real checkbox */
 }
 .middle-img {
   height: 30rem;
@@ -289,4 +295,39 @@
 .right-side-img{
   height: 39rem;
   width: 40rem;
+}
+.link-btns{
+  color: black;
+  font-weight: 500;
+  margin-left: 0.5rem;
+  text-decoration: none;
+}
+.link-btns-disabled{
+  color: orange;
+
+    font-weight: 500;
+  margin-left: 0.5rem;
+  text-decoration: none;
+}
+.checkbox-btns{
+  background-color: orange !important;
+
+}
+.btn-bg{
+  background-color: #d5d5d5;
+}
+.action-div{
+  width: 39.4rem;
+  margin-left: 20px;
+}
+.last-div{
+  height: 40.5rem;
+}
+.sidebar-div{
+  height: 43.5rem;
+}
+@media only screen and (min-width: 768px) {
+  .card-body {
+  width: 3rem;  
+  }
 }
