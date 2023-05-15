@@ -77,19 +77,17 @@ export class CephLibComponent {
   // This function loads up when the component is initialized.
   ngOnInit(){
     
-    this.instance = Panzoom(document.querySelector('.overlay') as HTMLElement);
+    this.instance = Panzoom(document.querySelector('.container') as HTMLElement);
     this.options = steinerPoints;
     this.ImageElement = document.querySelector('.overlay') as HTMLElement;
     this.TableElement = document.querySelector('.data-table')
     this.div = document.querySelector('.overlay') as HTMLDivElement;
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
-      this.count = Object.keys(result.data.points).length;
-     
+      
       this.imageURL = result.data.xray_data[0].dataImage;
       this.tempLineArr = result.data.lines;
-    
       this.lineArr = result.data.lines;
-     
+      
       result.data.points.forEach((element:any) => {
         this.tempPointArray[element.point_name_alias] = {
           pointName : element.poinName,
@@ -98,7 +96,7 @@ export class CephLibComponent {
           point_name_alias : element.point_name_alias,
           isAdded : true
         }
-
+        
         this.pointsArray[element.point_name_alias] = {
           pointName : element.poinName,
           x: element.x,
@@ -107,7 +105,12 @@ export class CephLibComponent {
           isAdded : true,
         }
       })
-
+      this.count = Object.keys(this.pointsArray).length;
+      console.log(this.count)
+      if(this.count == this.options.length){
+        console.log(true)
+        this.allPointsCompleted = true 
+      }
       result.data.points.forEach((element:any) => {
         this.options.forEach((element1:any) => {
           if(element.point_name_alias == element1.pointAlias){
@@ -125,6 +128,7 @@ export class CephLibComponent {
       }
     })
     
+   
   }
   // This Getter derives the line to be drawn between two points based on the relationship defined in the angle.ts and distance.ts file
   get lines() {
@@ -172,7 +176,7 @@ export class CephLibComponent {
             x_top = Math.floor((y1 + y2) / 2 - 1 / 2)  + 4;
           }
           x_angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
-          
+          console.log(id)
         }
       return {
         distance,
@@ -361,18 +365,18 @@ export class CephLibComponent {
     this.pointNameAlias = this.options[this.index].pointAlias;
     this.count++;
     console.log(this.count)
-    if(this.index == this.options.length){
+    if(this.count == this.options.length){
       console.log(true)
       this.allPointsCompleted = true 
     }
    
-    console.log(event.offsetX, event.offsetY)
+    console.log(event.clientX, event.clientY)
     
 
     this.pointsArray[this.pointNameAlias] = {
       pointName: this.pointName,
-      x: event.offsetX - 3,
-      y: event.offsetY - 3,
+      x: event.offsetX + 8,
+      y: event.offsetY - 5,
       point_name_alias: this.pointNameAlias,
       isAdded: true
     }
@@ -475,7 +479,7 @@ export class CephLibComponent {
       "ceph_id" : atob(this.activatedRouter.snapshot.params['id']),
       "points" : this.pointsArray,
       "lines" : this.lines,
-      "angles" : this.anglesValues,
+      "angles" : this.anglesArr,
       "magnificationCalibration" : this.magnifier
     }
     this.cephService.uploadCephData(this.payload).subscribe((result)=> {

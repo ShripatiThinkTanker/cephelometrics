@@ -14,3 +14,5 @@ const angleSchema = new mongoose.Schema({
 
 const AngleModel = mongoose.model('angles',angleSchema);
 export default AngleModel;
+
+

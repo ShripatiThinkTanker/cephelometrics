@@ -34,7 +34,7 @@ export class AddEditCephelometricsComponent {
         }
         this.cephService.uploadXRayData(this.payload).subscribe((result:any) => {
           console.log("Result _id" + JSON.stringify(result));
-          this.router.navigate(['cephelometrics/open/',btoa(result.data)])
+          this.router.navigate(['cephalometrics/open/',btoa(result.data)])
         })
         this.toaster.success("File Added", "File uploaded Successfully");
       }else{

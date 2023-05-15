@@ -10,11 +10,14 @@ const cephLogicHandler = {
         return all_xrays;
     },
     "uploadData": async (payload:any)=> {
-       
-        const newDataImageURl = payload.dataURl.replace(/['"]/g,'');
-        const newPayload = {dataImage : newDataImageURl, xrayName: payload.fileName}
-        const res:any = await cephMasterModel.create(newPayload).then(result => {return result}).catch(err => console.log(err));
-        return {"message" : "data inserted successfully", "data" : res._id}; 
+        if(payload.dataURl != null || payload.dataURl != undefined){
+            const newDataImageURl = payload.dataURl.replace(/['"]/g,'');
+            const newPayload = {dataImage : newDataImageURl, xrayName: payload.fileName}
+            const res:any = await cephMasterModel.create(newPayload).then(result => {return result}).catch(err => console.log(err));
+            return {"message" : "data inserted successfully", "data" : res._id}; 
+        }else{
+            console.log("Payload is not available")
+        }
     },
     "uploadCephData": async(payload:any) => {
         let pointData: any = {}
@@ -44,7 +47,7 @@ const cephLogicHandler = {
             })
             var angle:any = [];
             angle_info.forEach((element:any) => {
-                if(element.interpretation != ""){
+                if(element.value != ""){
                     element['masterObjectId'] = new ObjectId(payload.ceph_id);
                     angle.push(element)
                 }
@@ -73,7 +76,12 @@ const cephLogicHandler = {
 
         }
         if(angleResult.length > 0){
-            await AngleModel.deleteMany({"masterObjectId" : new ObjectId(payload.ceph_id)})
+             AngleModel.deleteMany({"masterObjectId" : new ObjectId(payload.ceph_id)}).exec((err) => {
+                if(err){
+                    console.log(err)
+                }
+                message += "Deleted Points "
+             })
         }
         await LineModel.create(LineArr)
         await pointModel.create(newPointArr)
