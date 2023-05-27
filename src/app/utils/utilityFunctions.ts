@@ -53,7 +53,7 @@ export const calculateAngle = (lineA: any, lineB: any,invert?:boolean, abs?:bool
 		return Math.round(angle * 10) / 10;
 }
 
-export const converDivToJPEG = async(element:HTMLDivElement, imageName:string) => {
+export const converDivToJPEG = async(element:HTMLElement, imageName:string) => {
     const canvas = await html2canvas(element,{
         width: 1700,
         height: 800

@@ -10,7 +10,7 @@ import { globalSettings } from '../utils/globalSettings';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { distance } from '../utils/distance';
-
+import { MenuItem, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-ceph-lib',
   templateUrl: './ceph-lib.component.html',
@@ -18,7 +18,8 @@ import { distance } from '../utils/distance';
 })
 export class CephLibComponent {
   imageURL: string | null = "";
-  
+  items: MenuItem[];
+
   instance : any;
   showImageSettingsPanel = false;
   contrastSetting:number = 100;
@@ -72,16 +73,36 @@ export class CephLibComponent {
   })
 
   constructor(public router:Router, public activatedRouter : ActivatedRoute, public cephService: CephelometricsService, public fb : FormBuilder, public toasterService: ToastrService ){
+    this.items = [
+      {
+          label: 'Export To JPEG',
+          icon: 'pi pi-fw pi-file',
+          command : ()=>{
+            this.exportToJPEG()
+          }
+      },
 
+      {
+        label: 'Export To PDF',
+        icon: 'pi pi-fw pi-file',
+        command : ()=>{
+          this.exportToPDF()
+        }
+    },
+     
+      {
+          separator: true
+      },
+  ];
   }
   // This function loads up when the component is initialized.
   ngOnInit(){
     
     this.instance = Panzoom(document.querySelector('.container') as HTMLElement);
     this.options = steinerPoints;
-    this.ImageElement = document.querySelector('.overlay') as HTMLElement;
+   
     this.TableElement = document.querySelector('.data-table')
-    this.div = document.querySelector('.overlay') as HTMLDivElement;
+    this.div = document.querySelector('.container') as HTMLDivElement;
     this.cephService.getCephInnerData({id: atob(this.activatedRouter.snapshot.params['id'])}).subscribe((result:any) => {
       
       this.imageURL = result.data.xray_data[0].dataImage;
@@ -196,7 +217,7 @@ export class CephLibComponent {
   selectedIndex(index:number){
       this.index = index
       if(this.options[this.index + 1] != undefined){
-        this.previewImage = this.options[this.index + 1].imagePath;
+        this.previewImage = this.options[this.index].imagePath;
       }
   }
   findIndex(array:any, callback:(point:any) => boolean){
@@ -498,7 +519,9 @@ export class CephLibComponent {
     }
   }
    exportToJPEG(){
-     converDivToJPEG(this.ImageElement, "CephalometricAnalysis")
+    this.ImageElement = document.querySelector('.containmentDiv') as HTMLElement;
+    console.log(this.ImageElement)
+    converDivToJPEG(this.ImageElement, "CephalometricAnalysis")
   }
    exportToPDF(){
     convertDivToPDF(this.ImageElement,this.TableElement,"CephalometricAnalysis")
@@ -535,4 +558,6 @@ export class CephLibComponent {
     this.invertSetting = 0
     this.imageSettings.patchValue({brightnessSlider : this.brightnessSetting, contrastSlider:this.contrastSetting, invertSlider : this.invertSetting})
    }
+
+   
 }
